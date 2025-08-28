@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SQster Web</title>
-  <link rel="icon" href="https://www.march.es/themes/custom/cortazar/src/favicons/apple-touch-icon.png">
+  <title>Historia de la Música Sacra</title>
+  <link rel="icon" href="https://bustena.wordpress.com/wp-content/uploads/2023/02/cropped-icon-piano.png">
 
   <link rel="stylesheet" href="style.css">
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -13,15 +13,14 @@
 <body>
 
 <header>
-  <a href="https://www.march.es/es/madrid/conciertos/material/cuarteto-cuerdas-hablan" target="_blank">
-    <img class="logo" src="https://bustena.com/wp-content/mp3/timelines/fjm_cc/LOGO_FJM.png" alt="Logo SQster">
+  <a href="https://bustena.wordpress.com/" target="_blank" class="header-link">
+    <img class="logo-icon" src="https://bustena.wordpress.com/wp-content/uploads/2023/02/cropped-icon-piano.png" alt="Icono">
+    <span class="titulo-principal">Historia de la … Música Sacra</span>
   </a>
-  <div class="titulo-principal">SQster</div>
 </header>
 
 <div id="cargando"><p><strong>Cargando datos...</strong></p></div>
 
-<!-- Selección de modalidad -->
 <div id="seleccionModo" class="hidden">
   <p><strong>Selecciona una modalidad de juego</strong></p>
   <div>
@@ -31,7 +30,6 @@
   </div>
 </div>
 
-<!-- Selección de número de jugadores -->
 <div id="bienvenida" class="hidden">
   <p><strong>Número de jugadores o equipos (2–6)</strong></p>
   <div>
@@ -46,7 +44,6 @@
   </div>
 </div>
 
-<!-- Confirmación antes de iniciar el juego -->
 <div id="pantallaInicioJuego" class="hidden">
   <h3>¿Comenzamos el juego? 🎶</h3>
   <div>
@@ -55,18 +52,14 @@
   </div>
 </div>
 
-<!-- Contenido principal -->
 <div id="contenido" class="hidden">
   <div id="titulo" class="cuarteto-numero"></div>
 
-  <!-- Ficha de compositor: inicialmente oculta/vacía -->
   <div id="detalles" class="invisible ficha-detalle">
     <div class="ficha-contenido">
-      <!-- Imagen del compositor -->
       <div class="ficha-imagen">
         <img id="imagen" class="hidden" alt="">
       </div>
-      <!-- Texto descriptivo -->
       <div class="ficha-texto">
         <div class="anio" id="anio"></div>
         <div id="descripcion"></div>
@@ -75,30 +68,26 @@
     </div>
   </div>
 
-  <!-- Reproductor de audio -->
   <div id="audio-container"></div>
 
-  <!-- Botón para mostrar solución -->
   <div id="botonSolucion">
     <button onclick="mostrarSolucion()" id="btnSolucion" title="Atajo: Enter">🎯 Solución</button>
   </div>
 
-  <!-- Botones de navegación -->
   <div id="botones">
     <button onclick="anterior()" id="btnAnterior" title="Atajo: ← (flecha izquierda)">⬅ Anterior</button>
     <button onclick="siguiente()" id="btnSiguiente" title="Atajo: → (flecha derecha)">Siguiente ➡</button>
   </div>
 
-  <!-- Mensaje final -->
   <div id="reinicio" class="hidden">
     <p>Has escuchado todas las obras.</p>
     <p><strong>Recarga manualmente la página para volver a empezar.</strong></p>
   </div>
 </div>
 
-<!-- Botón global de reglas -->
 <div id="boton-reglas-global" onclick="abrirReglas()">📖 Reglas del juego</div>
 
 <script src="script.js"></script>
+
 </body>
 </html>
