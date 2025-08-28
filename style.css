@@ -8,29 +8,38 @@ body {
   transition: background-color 1s ease;
 }
 
+/* ================= CABECERA ================= */
 header {
-  padding-top: 1em;
+  padding: 1em;
+}
+
+header .header-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  text-decoration: none;
+  color: inherit;
 }
 
 .logo-icon {
-  width: 36px;   /* o el tamaño que quieras */
+  width: 36px;
   height: 36px;
-  margin-bottom: 0;
 }
 
 .titulo-principal {
   font-size: 1.5em;
   font-weight: 600;
-  margin: 0.2em;
+  margin: 0;
 }
 
 .hidden {
   display: none;
 }
 
+/* ================= PANTALLAS ================= */
 #bienvenida,
 #contenido,
-#pantallaInicioJuego,
+#menuModos,
 #cargando {
   padding: 2em 1em;
 }
@@ -57,12 +66,6 @@ header {
   margin-bottom: 1em;
 }
 
-#pantallaInicioJuego h3 {
-  font-size: 1.6em;
-  font-weight: 600;
-  margin-bottom: 1em;
-}
-
 #detalles {
   min-height: 4em;
   transition: opacity 0.3s ease;
@@ -73,7 +76,7 @@ header {
   visibility: hidden;
 }
 
-/* ================= Botones generales ================= */
+/* ================= BOTONES ================= */
 button {
   padding: 0.8em 1.5em;
   margin: 0.5em;
@@ -83,7 +86,7 @@ button {
   background-color: #222;
   color: white;
   font-weight: 600;
-  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
@@ -92,7 +95,7 @@ button:hover {
   background-color: #444;
 }
 
-/* ========== Contenedor de audio ========== */
+/* ================= AUDIO ================= */
 #audio-container {
   margin: 1em auto;
   width: 95%;
@@ -100,7 +103,6 @@ button:hover {
   transition: all 0.5s ease;
 }
 
-/* Botones de control de audio */
 .custom-audio-controls {
   display: flex;
   justify-content: center;
@@ -119,7 +121,7 @@ button:hover {
   justify-content: center;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
 }
 
 .audio-btn:hover {
@@ -132,7 +134,7 @@ button:hover {
   stroke: #fff;
 }
 
-/* ========== Botones de navegación ========== */
+/* ================= NAVEGACIÓN ================= */
 #botones {
   display: none;
   justify-content: center;
@@ -148,7 +150,7 @@ button:hover {
   margin-top: 1.5em;
 }
 
-/* ========== Botón global de reglas ========== */
+/* ================= BOTÓN FIJO ================= */
 #boton-reglas-global {
   position: fixed;
   bottom: 0;
@@ -170,62 +172,55 @@ button:hover {
 }
 
 /* =========================================================
-   NUEVO: Diseño de la ficha de solución con imagen + texto
+   FICHA DE SOLUCIÓN (imagen + texto)
    ========================================================= */
-
-/* Contenedor principal de la ficha */
 .ficha-detalle {
   margin: 1.5em auto;
   padding: 1.5em;
   border-radius: 14px;
   display: flex;
-  justify-content: center; /* Centra la ficha completa */
+  justify-content: center;
   transition: opacity 0.3s ease;
   width: 100%;
 }
 
-/* Contenido interno: imagen + texto */
 .ficha-contenido {
   display: flex;
   gap: 1.5em;
-  max-width: 700px;  /* Limita el ancho para centrarlo */
+  max-width: 700px;
   width: 100%;
   align-items: center;
 }
 
-/* Columna de la imagen */
 .ficha-imagen {
-  flex: 0 0 40%; /* Imagen ocupa el 40% */
+  flex: 0 0 40%;
   display: flex;
-  justify-content: flex-end; /* La pegamos al centro */
+  justify-content: flex-end;
 }
 
 .ficha-imagen img {
   display: block;
-  max-height: 220px; /* Más pequeña y proporcionada */
+  max-height: 220px; /* tamaño controlado */
   width: auto;
   border-radius: 8px;
-  box-shadow: none; /* Sin marco sombreado */
+  box-shadow: none;
 }
 
-/* Columna del texto */
 .ficha-texto {
-  flex: 0 0 60%; /* Texto ocupa el 60% */
+  flex: 0 0 60%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  text-align: left; /* Alineado a la izquierda */
+  text-align: left;
   gap: 0.4em;
 }
 
-/* Año destacado */
 .ficha-texto .anio {
   font-size: 2.2em;
   font-weight: 700;
   margin-bottom: 0.2em;
 }
 
-/* Descripción */
 #descripcion {
   font-size: 1.1rem;
   line-height: 1.5;
@@ -234,7 +229,6 @@ button:hover {
   font-weight: 700;
 }
 
-/* Texto extra */
 #texto-extra {
   font-size: 1rem;
   line-height: 1.6;
@@ -242,25 +236,73 @@ button:hover {
   color: #222;
 }
 
-/* Responsividad para móviles */
+/* =========================================================
+   LEYENDA (aparece antes de la solución)
+   ========================================================= */
+.leyenda-contenedor {
+  margin: 1.5em auto;
+  padding: 1.5em;
+  border-radius: 14px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.leyenda {
+  max-width: 700px;
+  width: 100%;
+  min-height: 220px; /* igual que altura de imagen aprox */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.6em;
+  text-align: left;
+}
+
+.leyenda-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  font-size: 1.05rem;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.leyenda-item .punto {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Ocultar leyenda automáticamente cuando hay solución */
+#detalles:not(.invisible) ~ #leyenda {
+  display: none;
+}
+
+/* ================= RESPONSIVO ================= */
 @media (max-width: 700px) {
   .ficha-contenido {
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
-
   .ficha-imagen {
     justify-content: center;
   }
-
   .ficha-imagen img {
     max-width: 85%;
     max-height: none;
   }
-
   .ficha-texto {
     text-align: center;
     padding-top: 1em;
+  }
+
+  .leyenda {
+    text-align: center;
+  }
+  .leyenda-item {
+    justify-content: center;
   }
 }
