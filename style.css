@@ -201,15 +201,6 @@ button:hover {
   transition: opacity 0.3s ease;
 }
 
-.ficha-imagen img {
-  display: block;
-  max-height: 510px; /* Altura fija para retratos */
-  width: auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-  transition: opacity 0.3s ease;
-}
-
 /* Bloque de texto */
 .ficha-texto {
   flex: 1;
