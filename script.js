@@ -29,8 +29,9 @@ window.onload = () => {
       .sort(() => Math.random() - 0.5);
 
       solucionMostrada = new Array(datos.length).fill(false);
+
       document.getElementById("cargando").classList.add("hidden");
-      document.getElementById("seleccionModo").classList.remove("hidden");
+      document.getElementById("menuModos").classList.remove("hidden");
     });
 
   window.focus();
@@ -50,16 +51,11 @@ window.onload = () => {
         else {
           const btnVolver = document.querySelector("#bienvenida button[onclick='volverASeleccionModo()']");
           if (btnVolver && btnVolver.offsetParent !== null) volverASeleccionModo();
-
-          const btnVolverInicio = document.querySelector("#pantallaInicioJuego button[onclick='volverASeleccionModoDesdeInicio()']");
-          if (btnVolverInicio && btnVolverInicio.offsetParent !== null) volverASeleccionModoDesdeInicio();
         }
         break;
       case "Enter":
         const btnSol = document.getElementById("btnSolucion");
-        const pantallaInicio = document.getElementById("pantallaInicioJuego");
-        if (pantallaInicio && pantallaInicio.offsetParent !== null) comenzarJuego();
-        else if (btnSol && btnSol.offsetParent !== null) mostrarSolucion();
+        if (btnSol && btnSol.offsetParent !== null) mostrarSolucion();
         break;
       case " ":
         event.preventDefault();
@@ -84,13 +80,9 @@ function abrirReglas() {
 }
 
 function seleccionarModo(modo) {
-  document.getElementById("seleccionModo").classList.add("hidden");
-  if (modo === "clasico") {
-    document.getElementById("bienvenida").classList.remove("hidden");
-  } else {
-    modoJuego = modo;
-    document.getElementById("pantallaInicioJuego").classList.remove("hidden");
-  }
+  modoJuego = modo; // 'solitario' o 'mesa'
+  document.getElementById("menuModos").classList.add("hidden");
+  document.getElementById("bienvenida").classList.remove("hidden");
 }
 
 function empezar(num) {
@@ -98,6 +90,7 @@ function empezar(num) {
   document.getElementById("bienvenida").classList.add("hidden");
   document.getElementById("contenido").classList.remove("hidden");
   indice = 0;
+  mostrar();
 }
 
 function mostrar() {
@@ -121,12 +114,6 @@ function mostrar() {
     titulo.innerHTML = `<div class="inicio-label">Año de inicio del jugador/equipo ${indice + 1}</div><div class="inicio-anio">${item.año}</div>`;
     botones.style.display = "flex";
     document.getElementById("btnAnterior").style.display = (indice === 0) ? "none" : "inline-block";
-    return;
-  }
-
-  if (indice === jugadores) {
-    document.getElementById("contenido").classList.add("hidden");
-    document.getElementById("pantallaInicioJuego").classList.remove("hidden");
     return;
   }
 
@@ -182,11 +169,11 @@ function mostrar() {
   // Si ya estaba revelada la solución
   if (solucionMostrada[indice]) {
     document.getElementById("anio").textContent = item.año;
-    document.getElementById("descripcion").innerHTML = `${item.autor}<br>${item.obra}`;
-    img.classList.add("hidden");   // ocultamos primero
-    img.src = "";                  // limpiamos la imagen previa
-    img.alt = "";                  // reseteamos el alt
-    img.onload = () => img.classList.remove("hidden"); // la mostramos cuando cargue la nueva
+    document.getElementById("descripcion").innerHTML = `<strong>${item.autor}</strong><br>${item.obra}`;
+    img.classList.add("hidden");
+    img.src = "";
+    img.alt = "";
+    img.onload = () => img.classList.remove("hidden");
 
     img.src = item.imagen;
     img.alt = item.obra;
@@ -212,12 +199,12 @@ function mostrarSolucion() {
   solucionMostrada[indice] = true;
 
   document.getElementById("anio").textContent = item.año;
-  document.getElementById("descripcion").innerHTML = `${item.autor}<br>${item.obra}`;
+  document.getElementById("descripcion").innerHTML = `<strong>${item.autor}</strong><br>${item.obra}`;
   const img = document.getElementById("imagen");
-  img.classList.add("hidden");   // ocultamos primero
-  img.src = "";                  // limpiamos la imagen previa
-  img.alt = "";                  // reseteamos el alt
-  img.onload = () => img.classList.remove("hidden"); // la mostramos cuando cargue la nueva
+  img.classList.add("hidden");
+  img.src = "";
+  img.alt = "";
+  img.onload = () => img.classList.remove("hidden");
 
   img.src = item.imagen;
   img.alt = item.obra;
@@ -235,13 +222,6 @@ function mostrarSolucion() {
   if (item.color) document.body.style.backgroundColor = item.color;
   document.getElementById("botonSolucion").classList.add("hidden");
   document.getElementById("botones").style.display = "flex";
-}
-
-function comenzarJuego() {
-  document.getElementById("pantallaInicioJuego").classList.add("hidden");
-  document.getElementById("contenido").classList.remove("hidden");
-  indice++;
-  mostrar();
 }
 
 function siguiente() {
@@ -263,10 +243,5 @@ function anterior() {
 
 function volverASeleccionModo() {
   document.getElementById("bienvenida").classList.add("hidden");
-  document.getElementById("seleccionModo").classList.remove("hidden");
-}
-
-function volverASeleccionModoDesdeInicio() {
-  document.getElementById("pantallaInicioJuego").classList.add("hidden");
-  document.getElementById("seleccionModo").classList.remove("hidden");
+  document.getElementById("menuModos").classList.remove("hidden");
 }
