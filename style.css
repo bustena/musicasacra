@@ -192,11 +192,13 @@ button:hover {
 }
 
 /* Imagen del compositor */
-.ficha-imagen {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
+.ficha-imagen img {
+  display: block;
+  max-height: 320px; /* Más pequeña y coqueta */
+  width: auto;
+  border-radius: 8px; /* Bordes suaves */
+  box-shadow: none;   /* Quitamos la sombra */
+  transition: opacity 0.3s ease;
 }
 
 .ficha-imagen img {
