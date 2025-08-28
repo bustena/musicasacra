@@ -98,7 +98,6 @@ function empezar(num) {
   document.getElementById("bienvenida").classList.add("hidden");
   document.getElementById("contenido").classList.remove("hidden");
   indice = 0;
-  ();
 }
 
 function mostrar() {
