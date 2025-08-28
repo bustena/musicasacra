@@ -24,9 +24,14 @@ img.logo {
   margin: 0.2em;
 }
 
-.hidden { display: none; }
+.hidden { 
+  display: none; 
+}
 
-#bienvenida, #contenido, #pantallaInicioJuego, #cargando {
+#bienvenida, 
+#contenido, 
+#pantallaInicioJuego, 
+#cargando {
   padding: 2em 1em;
 }
 
@@ -93,7 +98,7 @@ button:hover {
   transition: all 0.5s ease;
 }
 
-/* === AÑADIDO PARA LOS NUEVOS BOTONES DE AUDIO === */
+/* === Botones de control de audio === */
 .custom-audio-controls {
   display: flex;
   justify-content: center;
@@ -124,8 +129,8 @@ button:hover {
   height: 28px;
   stroke: #fff;
 }
-/* === FIN AÑADIDO === */
 
+/* === Botones de navegación === */
 #botones {
   display: none;
   justify-content: center;
@@ -133,9 +138,15 @@ button:hover {
   flex-wrap: wrap;
 }
 
-#botonSolucion { margin-top: 1.2em; }
-#reinicio { margin-top: 1.5em; }
+#botonSolucion { 
+  margin-top: 1.2em; 
+}
 
+#reinicio { 
+  margin-top: 1.5em; 
+}
+
+/* === Botón global de reglas === */
 #boton-reglas-global {
   position: fixed;
   bottom: 0;
@@ -154,4 +165,98 @@ button:hover {
 
 #boton-reglas-global:hover {
   background-color: #333;
+}
+
+/* =========================================================
+   NUEVO: Diseño de la ficha de solución con imagen + texto
+   ========================================================= */
+
+.ficha-detalle {
+  margin-top: 1.5em;
+  padding: 1.5em;
+  border-radius: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  transition: opacity 0.3s ease;
+}
+
+/* Contenido interno: imagen + texto */
+.ficha-contenido {
+  display: flex;
+  gap: 1.5em;
+  max-width: 900px;
+  align-items: flex-start;
+  text-align: left;
+  width: 100%;
+}
+
+/* Imagen del compositor */
+.ficha-imagen {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.ficha-imagen img {
+  display: block;
+  max-height: 510px; /* Altura fija para retratos */
+  width: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  transition: opacity 0.3s ease;
+}
+
+/* Bloque de texto */
+.ficha-texto {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  padding-top: 0.3em;
+}
+
+/* Año: dato principal */
+.ficha-texto .anio {
+  font-size: 2.4em;
+  font-weight: 700;
+  margin-bottom: 0.2em;
+}
+
+/* Autor + obra */
+#descripcion {
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+#descripcion strong {
+  font-weight: 700;
+}
+
+/* Texto extra opcional */
+#texto-extra {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-top: 0.5em;
+  color: #222;
+  max-width: 100%;
+}
+
+/* Responsividad para pantallas pequeñas */
+@media (max-width: 700px) {
+  .ficha-contenido {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .ficha-imagen img {
+    max-width: 85%;
+    max-height: none;
+  }
+
+  .ficha-texto {
+    text-align: center;
+    padding-top: 1em;
+  }
 }
