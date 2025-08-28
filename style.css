@@ -171,24 +171,25 @@ button:hover {
    NUEVO: Diseño de la ficha de solución con imagen + texto
    ========================================================= */
 
+/* Contenedor principal de la ficha */
 .ficha-detalle {
-  margin-top: 1.5em;
+  margin: 1.5em auto;
   padding: 1.5em;
   border-radius: 14px;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  justify-content: center;   /* Centramos horizontalmente el bloque entero */
   transition: opacity 0.3s ease;
+  width: 100%;
 }
 
 /* Contenido interno: imagen + texto */
 .ficha-contenido {
   display: flex;
-  gap: 1.2em;
-  max-width: 850px;
-  align-items: center; /* Ahora centramos verticalmente */
-  text-align: left;
+  gap: 1.5em;
+  max-width: 850px;         /* Limitamos el ancho total */
   width: 100%;
+  align-items: flex-start;
+  text-align: left;
 }
 
 /* Imagen del compositor */
