@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQster Web</title>
+  <link rel="icon" href="https://www.march.es/themes/custom/cortazar/src/favicons/apple-touch-icon.png">
+
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+
+<header>
+  <a href="https://www.march.es/es/madrid/conciertos/material/cuarteto-cuerdas-hablan" target="_blank">
+    <img class="logo" src="https://bustena.com/wp-content/mp3/timelines/fjm_cc/LOGO_FJM.png" alt="Logo SQster">
+  </a>
+  <div class="titulo-principal">SQster</div>
+</header>
+
+<div id="cargando"><p><strong>Cargando datos...</strong></p></div>
+
+<div id="seleccionModo" class="hidden">
+  <p><strong>Selecciona una modalidad de juego</strong></p>
+  <div>
+    <button onclick="seleccionarModo('colores')">🎨 Por colores</button>
+    <button onclick="seleccionarModo('sinPasarse')">📉 Sin pasarse</button>
+    <button onclick="seleccionarModo('clasico')">🎻 SQster!</button>
+  </div>
+</div>
+
+<div id="bienvenida" class="hidden">
+  <p><strong>Número de jugadores o equipos (2–6)</strong></p>
+  <div>
+    <button onclick="empezar(2)" title="Atajo: tecla 2">2</button>
+    <button onclick="empezar(3)" title="Atajo: tecla 3">3</button>
+    <button onclick="empezar(4)" title="Atajo: tecla 4">4</button>
+    <button onclick="empezar(5)" title="Atajo: tecla 5">5</button>
+    <button onclick="empezar(6)" title="Atajo: tecla 6">6</button>
+  </div>
+  <div style="margin-top: 1em;">
+    <button onclick="volverASeleccionModo()">⬅ Anterior</button>
+  </div>
+</div>
+
+<div id="pantallaInicioJuego" class="hidden">
+  <h3>¿Comenzamos el juego? 🎶</h3>
+  <div>
+    <button onclick="volverASeleccionModoDesdeInicio()">⬅ Anterior</button>
+    <button onclick="comenzarJuego()">OK</button>
+  </div>
+</div>
+
+<div id="contenido" class="hidden">
+  <div id="titulo" class="cuarteto-numero"></div>
+
+  <div id="detalles" class="invisible">
+    <div class="anio" id="anio"></div>
+    <div id="descripcion"></div>
+  </div>
+
+  <div id="audio-container"></div>
+
+  <div id="botonSolucion">
+    <button onclick="mostrarSolucion()" id="btnSolucion" title="Atajo: Enter">🎯 Solución</button>
+  </div>
+
+  <div id="botones">
+    <button onclick="anterior()" id="btnAnterior" title="Atajo: ← (flecha izquierda)">⬅ Anterior</button>
+    <button onclick="siguiente()" id="btnSiguiente" title="Atajo: → (flecha derecha)">Siguiente ➡</button>
+  </div>
+
+  <div id="reinicio" class="hidden">
+    <p>Has escuchado todas las obras.</p>
+    <p><strong>Recarga manualmente la página para volver a empezar.</strong></p>
+  </div>
+</div>
+
+<div id="boton-reglas-global" onclick="abrirReglas()">📖 Reglas del juego</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
