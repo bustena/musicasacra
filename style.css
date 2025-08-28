@@ -202,7 +202,7 @@ button:hover {
 
 .ficha-imagen img {
   display: block;
-  max-height: 280px; /* Más pequeña y proporcionada */
+  max-height: 220px; /* Más pequeña y proporcionada */
   width: auto;
   border-radius: 8px;
   box-shadow: none; /* Sin marco sombreado */
