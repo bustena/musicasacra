@@ -21,15 +21,16 @@
 
 <div id="cargando"><p><strong>Cargando datos...</strong></p></div>
 
-<div id="seleccionModo" class="hidden">
-  <p><strong>Selecciona una modalidad de juego</strong></p>
+<!-- Pantalla inicial: elegir modalidad -->
+<div id="menuModos" class="hidden">
+  <p><strong>Elige modo</strong></p>
   <div>
-    <button onclick="seleccionarModo('colores')">🎨 Por colores</button>
-    <button onclick="seleccionarModo('sinPasarse')">📉 Sin pasarse</button>
-    <button onclick="seleccionarModo('clasico')">🎻 SQster!</button>
+    <button onclick="seleccionarModo('solitario')">🧩 Solitario</button>
+    <button onclick="seleccionarModo('mesa')">🎲 Juego de mesa</button>
   </div>
 </div>
 
+<!-- Pantalla bienvenida: número de jugadores -->
 <div id="bienvenida" class="hidden">
   <p><strong>Número de jugadores o equipos (2–6)</strong></p>
   <div>
@@ -44,17 +45,11 @@
   </div>
 </div>
 
-<div id="pantallaInicioJuego" class="hidden">
-  <h3>¿Comenzamos el juego? 🎶</h3>
-  <div>
-    <button onclick="volverASeleccionModoDesdeInicio()">⬅ Anterior</button>
-    <button onclick="comenzarJuego()">OK</button>
-  </div>
-</div>
-
+<!-- Contenido principal del juego -->
 <div id="contenido" class="hidden">
   <div id="titulo" class="cuarteto-numero"></div>
 
+  <!-- Ficha de solución -->
   <div id="detalles" class="invisible ficha-detalle">
     <div class="ficha-contenido">
       <div class="ficha-imagen">
@@ -68,23 +63,54 @@
     </div>
   </div>
 
+  <!-- Leyenda previa (se oculta cuando se muestra la solución) -->
+  <div id="leyenda" class="leyenda-contenedor">
+    <div class="leyenda">
+      <div class="leyenda-item">
+        <span class="punto" style="background:#5ca8d6"></span>
+        <span>Edad Media y Renacimiento (hasta 1500)</span>
+      </div>
+      <div class="leyenda-item">
+        <span class="punto" style="background:#f9c623"></span>
+        <span>Renacimiento y Barroco temprano (hasta 1640)</span>
+      </div>
+      <div class="leyenda-item">
+        <span class="punto" style="background:#e06464"></span>
+        <span>Barroco tardío (hasta 1750)</span>
+      </div>
+      <div class="leyenda-item">
+        <span class="punto" style="background:#26b98f"></span>
+        <span>Periodo clásico-romántico (hasta 1920)</span>
+      </div>
+      <div class="leyenda-item">
+        <span class="punto" style="background:#c87ab0"></span>
+        <span>Siglos XX y XXI</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controles de audio -->
   <div id="audio-container"></div>
 
+  <!-- Botón solución -->
   <div id="botonSolucion">
     <button onclick="mostrarSolucion()" id="btnSolucion" title="Atajo: Enter">🎯 Solución</button>
   </div>
 
+  <!-- Botones de navegación -->
   <div id="botones">
     <button onclick="anterior()" id="btnAnterior" title="Atajo: ← (flecha izquierda)">⬅ Anterior</button>
     <button onclick="siguiente()" id="btnSiguiente" title="Atajo: → (flecha derecha)">Siguiente ➡</button>
   </div>
 
+  <!-- Mensaje final -->
   <div id="reinicio" class="hidden">
     <p>Has escuchado todas las obras.</p>
     <p><strong>Recarga manualmente la página para volver a empezar.</strong></p>
   </div>
 </div>
 
+<!-- Botón fijo inferior -->
 <div id="boton-reglas-global" onclick="abrirReglas()">📖 Reglas del juego</div>
 
 <script src="script.js"></script>
