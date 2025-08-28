@@ -98,7 +98,7 @@ function empezar(num) {
   document.getElementById("bienvenida").classList.add("hidden");
   document.getElementById("contenido").classList.remove("hidden");
   indice = 0;
-  mostrar();
+  ();
 }
 
 function mostrar() {
@@ -184,6 +184,11 @@ function mostrar() {
   if (solucionMostrada[indice]) {
     document.getElementById("anio").textContent = item.año;
     document.getElementById("descripcion").innerHTML = `${item.autor}<br>${item.obra}`;
+    img.classList.add("hidden");   // ocultamos primero
+    img.src = "";                  // limpiamos la imagen previa
+    img.alt = "";                  // reseteamos el alt
+    img.onload = () => img.classList.remove("hidden"); // la mostramos cuando cargue la nueva
+
     img.src = item.imagen;
     img.alt = item.obra;
     img.classList.remove("hidden");
@@ -210,6 +215,11 @@ function mostrarSolucion() {
   document.getElementById("anio").textContent = item.año;
   document.getElementById("descripcion").innerHTML = `${item.autor}<br>${item.obra}`;
   const img = document.getElementById("imagen");
+  img.classList.add("hidden");   // ocultamos primero
+  img.src = "";                  // limpiamos la imagen previa
+  img.alt = "";                  // reseteamos el alt
+  img.onload = () => img.classList.remove("hidden"); // la mostramos cuando cargue la nueva
+
   img.src = item.imagen;
   img.alt = item.obra;
   img.classList.remove("hidden");
