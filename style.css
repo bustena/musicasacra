@@ -12,10 +12,10 @@ header {
   padding-top: 1em;
 }
 
-img.logo {
-  width: 380px;
-  height: auto;
-  margin-bottom: 0.5em;
+.logo-icon {
+  width: 36px;   /* o el tamaño que quieras */
+  height: 36px;
+  margin-bottom: 0;
 }
 
 .titulo-principal {
