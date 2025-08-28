@@ -7,21 +7,26 @@ let URL_REGLAS = "https://view.genially.com/6834d0143c53b6064031a058?idSlide=709
 let modoJuego = "";
 
 window.onload = () => {
-  fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vQs4TXjmTrFMGNTqModfxjqReQFxqSm3Hi7dojisH2PvX6CWoB3Z_AU42VGaHvkjcEysdlYzLpwk9ny/pub?output=csv")
+  fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vQrioQKwGSHMHsy9dQr37uk1xCFZC8vhIKDXepOtNEM_efmPwpe5ROmksO0fu_ZmHlxPUskuXu4rmCw/pub?gid=0&single=true&output=csv")
     .then(response => response.text())
     .then(csv => {
-      const parsed = Papa.parse(csv, { header: true, skipEmptyLines: true });
+      const parsed = Papa.parse(csv, {
+        header: true,
+        skipEmptyLines: true,
+        delimiter: ",",
+        quoteChar: '"'
+      });
 
-datos = parsed.data
-  .slice(0, 40)  // ← lee solo filas 2 a 41
-  .map(fila => ({
-    año: fila["Año"],
-    autor: fila["Autor"],
-    obra: fila["Obra"],
-    url: fila["URL"],
-    color: fila["COLOR"]
-  }))
-  .sort(() => Math.random() - 0.5);
+      datos = parsed.data.map(fila => ({
+        año: fila["año"],
+        autor: fila["autor"],
+        obra: fila["obra"],
+        audio: fila["audio"],
+        color: fila["color"],
+        imagen: fila["imagen"],
+        texto: fila["texto"]
+      }))
+      .sort(() => Math.random() - 0.5);
 
       solucionMostrada = new Array(datos.length).fill(false);
       document.getElementById("cargando").classList.add("hidden");
@@ -103,6 +108,8 @@ function mostrar() {
   const detalles = document.getElementById("detalles");
   const botones = document.getElementById("botones");
   const solucion = document.getElementById("botonSolucion");
+  const img = document.getElementById("imagen");
+  const textoExtra = document.getElementById("texto-extra");
 
   document.getElementById("audio-container").innerHTML = "";
   detalles.classList.add("invisible");
@@ -110,6 +117,7 @@ function mostrar() {
   botones.style.display = "none";
   document.body.style.backgroundColor = "#dcdcdc";
 
+  // Fases iniciales para jugadores
   if (indice < jugadores) {
     titulo.innerHTML = `<div class="inicio-label">Año de inicio del jugador/equipo ${indice + 1}</div><div class="inicio-anio">${item.año}</div>`;
     botones.style.display = "flex";
@@ -123,10 +131,11 @@ function mostrar() {
     return;
   }
 
-  // a partir de aquí es una obra
+  // Mostrar obra
   titulo.innerHTML = `Cuarteto de cuerda ${indice - jugadores}`;
 
-  audioGlobal.src = item.url;
+  // Audio
+  audioGlobal.src = item.audio;
   audioGlobal.currentTime = 0;
   audioGlobal.play();
 
@@ -140,7 +149,6 @@ function mostrar() {
   document.getElementById("audio-container").appendChild(cont);
   lucide.createIcons();
 
-  // botones
   document.getElementById("btnRew").onclick = () => {
     audioGlobal.currentTime = Math.max(0, audioGlobal.currentTime - 5);
   };
@@ -161,7 +169,6 @@ function mostrar() {
     }
   };
 
-  // eventos para actualizar icono al pausar o al reanudar por otros medios
   audioGlobal.onpause = () => {
     const boton = document.getElementById("btnPlayPause");
     boton.innerHTML = '<i data-lucide="play"></i>';
@@ -173,10 +180,21 @@ function mostrar() {
     lucide.createIcons();
   };
 
-  // mostrar detalles si ya estaba revelada la solución
+  // Si ya estaba revelada la solución
   if (solucionMostrada[indice]) {
     document.getElementById("anio").textContent = item.año;
     document.getElementById("descripcion").innerHTML = `${item.autor}<br>${item.obra}`;
+    img.src = item.imagen;
+    img.alt = item.obra;
+    img.classList.remove("hidden");
+
+    if (item.texto) {
+      textoExtra.textContent = item.texto;
+      textoExtra.classList.remove("hidden");
+    } else {
+      textoExtra.classList.add("hidden");
+    }
+
     detalles.classList.remove("hidden", "invisible");
     if (item.color) document.body.style.backgroundColor = item.color;
     botones.style.display = "flex";
@@ -188,8 +206,22 @@ function mostrar() {
 function mostrarSolucion() {
   const item = datos[indice];
   solucionMostrada[indice] = true;
+
   document.getElementById("anio").textContent = item.año;
   document.getElementById("descripcion").innerHTML = `${item.autor}<br>${item.obra}`;
+  const img = document.getElementById("imagen");
+  img.src = item.imagen;
+  img.alt = item.obra;
+  img.classList.remove("hidden");
+
+  const textoExtra = document.getElementById("texto-extra");
+  if (item.texto) {
+    textoExtra.textContent = item.texto;
+    textoExtra.classList.remove("hidden");
+  } else {
+    textoExtra.classList.add("hidden");
+  }
+
   document.getElementById("detalles").classList.remove("invisible");
   if (item.color) document.body.style.backgroundColor = item.color;
   document.getElementById("botonSolucion").classList.add("hidden");
