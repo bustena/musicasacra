@@ -1,6 +1,5 @@
 let indice = 0;
 let datos = [];
-let jugadores = 0;
 let solucionMostrada = [];
 let audioGlobal = new Audio();
 let URL_REGLAS = "https://view.genially.com/6834d0143c53b6064031a058?idSlide=7099ad60-bc41-4a7a-83be-0fe6381c3869";
@@ -48,10 +47,6 @@ window.onload = () => {
       case "ArrowLeft":
         const btnPrev = document.getElementById("btnAnterior");
         if (btnPrev && !btnPrev.disabled && btnPrev.offsetParent !== null) anterior();
-        else {
-          const btnVolver = document.querySelector("#bienvenida button[onclick='volverASeleccionModo()']");
-          if (btnVolver && btnVolver.offsetParent !== null) volverASeleccionModo();
-        }
         break;
       case "Enter":
         const btnSol = document.getElementById("btnSolucion");
@@ -67,10 +62,6 @@ window.onload = () => {
           }
         }
         break;
-      case "2": case "3": case "4": case "5": case "6":
-        const bienvenida = document.getElementById("bienvenida");
-        if (bienvenida && bienvenida.offsetParent !== null) empezar(parseInt(key));
-        break;
     }
   });
 };
@@ -82,12 +73,6 @@ function abrirReglas() {
 function seleccionarModo(modo) {
   modoJuego = modo; // 'solitario' o 'mesa'
   document.getElementById("menuModos").classList.add("hidden");
-  document.getElementById("bienvenida").classList.remove("hidden");
-}
-
-function empezar(num) {
-  jugadores = num;
-  document.getElementById("bienvenida").classList.add("hidden");
   document.getElementById("contenido").classList.remove("hidden");
   indice = 0;
   mostrar();
@@ -109,16 +94,8 @@ function mostrar() {
   botones.style.display = "none";
   document.body.style.backgroundColor = "#dcdcdc";
 
-  // Fases iniciales para jugadores
-  if (indice < jugadores) {
-    titulo.innerHTML = `<div class="inicio-label">Año de inicio del jugador/equipo ${indice + 1}</div><div class="inicio-anio">${item.año}</div>`;
-    botones.style.display = "flex";
-    document.getElementById("btnAnterior").style.display = (indice === 0) ? "none" : "inline-block";
-    return;
-  }
-
-  // Mostrar obra
-  titulo.innerHTML = `Cuarteto de cuerda ${indice - jugadores}`;
+  // Título de obra
+  titulo.innerHTML = `Obra ${indice + 1}`;
 
   // Audio
   audioGlobal.src = item.audio;
@@ -239,9 +216,4 @@ function anterior() {
     indice--;
     mostrar();
   }
-}
-
-function volverASeleccionModo() {
-  document.getElementById("bienvenida").classList.add("hidden");
-  document.getElementById("menuModos").classList.remove("hidden");
 }
