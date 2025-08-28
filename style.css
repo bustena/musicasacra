@@ -24,13 +24,13 @@ img.logo {
   margin: 0.2em;
 }
 
-.hidden { 
-  display: none; 
+.hidden {
+  display: none;
 }
 
-#bienvenida, 
-#contenido, 
-#pantallaInicioJuego, 
+#bienvenida,
+#contenido,
+#pantallaInicioJuego,
 #cargando {
   padding: 2em 1em;
 }
@@ -73,6 +73,7 @@ img.logo {
   visibility: hidden;
 }
 
+/* ================= Botones generales ================= */
 button {
   padding: 0.8em 1.5em;
   margin: 0.5em;
@@ -82,7 +83,7 @@ button {
   background-color: #222;
   color: white;
   font-weight: 600;
-  box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
@@ -91,6 +92,7 @@ button:hover {
   background-color: #444;
 }
 
+/* ========== Contenedor de audio ========== */
 #audio-container {
   margin: 1em auto;
   width: 95%;
@@ -98,7 +100,7 @@ button:hover {
   transition: all 0.5s ease;
 }
 
-/* === Botones de control de audio === */
+/* Botones de control de audio */
 .custom-audio-controls {
   display: flex;
   justify-content: center;
@@ -117,7 +119,7 @@ button:hover {
   justify-content: center;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .audio-btn:hover {
@@ -130,7 +132,7 @@ button:hover {
   stroke: #fff;
 }
 
-/* === Botones de navegación === */
+/* ========== Botones de navegación ========== */
 #botones {
   display: none;
   justify-content: center;
@@ -138,15 +140,15 @@ button:hover {
   flex-wrap: wrap;
 }
 
-#botonSolucion { 
-  margin-top: 1.2em; 
+#botonSolucion {
+  margin-top: 1.2em;
 }
 
-#reinicio { 
-  margin-top: 1.5em; 
+#reinicio {
+  margin-top: 1.5em;
 }
 
-/* === Botón global de reglas === */
+/* ========== Botón global de reglas ========== */
 #boton-reglas-global {
   position: fixed;
   bottom: 0;
@@ -177,7 +179,7 @@ button:hover {
   padding: 1.5em;
   border-radius: 14px;
   display: flex;
-  justify-content: center;   /* Centramos horizontalmente el bloque entero */
+  justify-content: center; /* Centra la ficha completa */
   transition: opacity 0.3s ease;
   width: 100%;
 }
@@ -186,39 +188,44 @@ button:hover {
 .ficha-contenido {
   display: flex;
   gap: 1.5em;
-  max-width: 850px;         /* Limitamos el ancho total */
+  max-width: 700px;  /* Limita el ancho para centrarlo */
   width: 100%;
-  align-items: flex-start;
-  text-align: left;
+  align-items: center;
 }
 
-/* Imagen del compositor */
+/* Columna de la imagen */
+.ficha-imagen {
+  flex: 0 0 40%; /* Imagen ocupa el 40% */
+  display: flex;
+  justify-content: flex-end; /* La pegamos al centro */
+}
+
 .ficha-imagen img {
   display: block;
-  max-height: 320px; /* Más pequeña y coqueta */
+  max-height: 280px; /* Más pequeña y proporcionada */
   width: auto;
-  border-radius: 8px; /* Bordes suaves */
-  box-shadow: none;   /* Quitamos la sombra */
-  transition: opacity 0.3s ease;
+  border-radius: 8px;
+  box-shadow: none; /* Sin marco sombreado */
 }
 
-/* Bloque de texto */
+/* Columna del texto */
 .ficha-texto {
-  flex: 1;
+  flex: 0 0 60%; /* Texto ocupa el 60% */
   display: flex;
   flex-direction: column;
-  gap: 0.5em;
-  padding-top: 0.3em;
+  justify-content: center;
+  text-align: left; /* Alineado a la izquierda */
+  gap: 0.4em;
 }
 
-/* Año: dato principal */
+/* Año destacado */
 .ficha-texto .anio {
-  font-size: 2.4em;
+  font-size: 2.2em;
   font-weight: 700;
   margin-bottom: 0.2em;
 }
 
-/* Autor + obra */
+/* Descripción */
 #descripcion {
   font-size: 1.1rem;
   line-height: 1.5;
@@ -227,21 +234,24 @@ button:hover {
   font-weight: 700;
 }
 
-/* Texto extra opcional */
+/* Texto extra */
 #texto-extra {
   font-size: 1rem;
   line-height: 1.6;
   margin-top: 0.5em;
   color: #222;
-  max-width: 100%;
 }
 
-/* Responsividad para pantallas pequeñas */
+/* Responsividad para móviles */
 @media (max-width: 700px) {
   .ficha-contenido {
     flex-direction: column;
     align-items: center;
     text-align: center;
+  }
+
+  .ficha-imagen {
+    justify-content: center;
   }
 
   .ficha-imagen img {
