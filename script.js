@@ -172,33 +172,54 @@ function mostrar() {
 }
 
 function mostrarSolucion() {
+  if (!datos.length) return;
+
   const item = datos[indice];
   solucionMostrada[indice] = true;
 
-  document.getElementById("anio").textContent = item.año;
-  document.getElementById("descripcion").innerHTML = `<strong>${item.autor}</strong><br>${item.obra}`;
-  const img = document.getElementById("imagen");
-  img.classList.add("hidden");
-  img.src = "";
-  img.alt = "";
-  img.onload = () => img.classList.remove("hidden");
+  // Ocultar la leyenda previa (mismo hueco que la ficha)
+  const leyenda = document.getElementById("leyenda");
+  if (leyenda) leyenda.style.display = "none";
 
-  img.src = item.imagen;
-  img.alt = item.obra;
-  img.classList.remove("hidden");
+  // Rellenar textos
+  document.getElementById("anio").textContent = item.año || "";
+  document.getElementById("descripcion").innerHTML = `<strong>${item.autor || ""}</strong><br>${item.obra || ""}`;
 
+  // Texto extra (opcional)
   const textoExtra = document.getElementById("texto-extra");
-  if (item.texto) {
+  if (item.texto && item.texto.trim() !== "") {
     textoExtra.textContent = item.texto;
     textoExtra.classList.remove("hidden");
   } else {
     textoExtra.classList.add("hidden");
+    textoExtra.textContent = "";
   }
 
-  document.getElementById("detalles").classList.remove("invisible");
-  if (item.color) document.body.style.backgroundColor = item.color;
-  document.getElementById("botonSolucion").classList.add("hidden");
-  document.getElementById("botones").style.display = "flex";
+  // Imagen (precarga para evitar que se vea la anterior)
+  const img = document.getElementById("imagen");
+  if (img) {
+    img.classList.add("hidden");
+    img.removeAttribute("src");
+    img.alt = "";
+    img.onload = () => img.classList.remove("hidden");
+    if (item.imagen && item.imagen.trim() !== "") {
+      img.src = item.imagen;
+      img.alt = item.obra || "";
+    }
+  }
+
+  // Mostrar ficha y actualizar color de fondo
+  const detalles = document.getElementById("detalles");
+  if (detalles) detalles.classList.remove("invisible");
+  if (item.color && item.color.trim() !== "") {
+    document.body.style.backgroundColor = item.color;
+  }
+
+  // UI: ocultar botón "Solución" y mostrar navegación
+  const contSol = document.getElementById("botonSolucion");
+  if (contSol) contSol.classList.add("hidden");
+  const nav = document.getElementById("botones");
+  if (nav) nav.style.display = "flex";
 }
 
 function siguiente() {
