@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Historia de la Música Sacra</title>
-  <link rel="icon" href="https://bustena.wordpress.com/wp-content/uploads/2023/02/cropped-icon-piano.png">
+  <link rel="icon" href="https://bustena.wordpress.com/wp-content/uploads/2023/02/cropped-icon-piano.png"/>
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css"/>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
@@ -14,14 +14,14 @@
 
 <header>
   <a href="https://bustena.wordpress.com/" target="_blank" class="header-link">
-    <img class="logo-icon" src="https://bustena.wordpress.com/wp-content/uploads/2023/02/cropped-icon-piano.png" alt="Icono">
+    <img class="logo-icon" src="https://bustena.wordpress.com/wp-content/uploads/2023/02/cropped-icon-piano.png" alt="Icono"/>
     <span class="titulo-principal">Historia de la … Música Sacra</span>
   </a>
 </header>
 
 <div id="cargando"><p><strong>Cargando datos...</strong></p></div>
 
-<!-- Pantalla inicial: elegir modalidad -->
+<!-- Menú de modos -->
 <div id="menuModos" class="hidden">
   <p><strong>Elige modo</strong></p>
   <div>
@@ -30,42 +30,14 @@
   </div>
 </div>
 
-<!-- Pantalla bienvenida: número de jugadores -->
-<div id="bienvenida" class="hidden">
-  <p><strong>Número de jugadores o equipos (2–6)</strong></p>
-  <div>
-    <button onclick="empezar(2)" title="Atajo: tecla 2">2</button>
-    <button onclick="empezar(3)" title="Atajo: tecla 3">3</button>
-    <button onclick="empezar(4)" title="Atajo: tecla 4">4</button>
-    <button onclick="empezar(5)" title="Atajo: tecla 5">5</button>
-    <button onclick="empezar(6)" title="Atajo: tecla 6">6</button>
-  </div>
-  <div style="margin-top: 1em;">
-    <button onclick="volverASeleccionModo()">⬅ Anterior</button>
-  </div>
-</div>
-
-<!-- Contenido principal del juego -->
+<!-- Contenido principal -->
 <div id="contenido" class="hidden">
   <div id="titulo" class="cuarteto-numero"></div>
 
-  <!-- Ficha de solución -->
-  <div id="detalles" class="invisible ficha-detalle">
-    <div class="ficha-contenido">
-      <div class="ficha-imagen">
-        <img id="imagen" class="hidden" alt="">
-      </div>
-      <div class="ficha-texto">
-        <div class="anio" id="anio"></div>
-        <div id="descripcion"></div>
-        <p id="texto-extra" class="hidden"></p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Leyenda previa (se oculta cuando se muestra la solución) -->
-  <div id="leyenda" class="leyenda-contenedor">
-    <div class="leyenda">
+  <!-- Contenedor común: leyenda (por defecto) y ficha de solución -->
+  <div class="ficha-detalle">
+    <!-- LEYENDA: visible por defecto, ocupa el mismo espacio que la ficha -->
+    <div id="leyenda" class="ficha-contenido">
       <div class="leyenda-item">
         <span class="punto" style="background:#5ca8d6"></span>
         <span>Edad Media y Renacimiento (hasta 1500)</span>
@@ -87,6 +59,18 @@
         <span>Siglos XX y XXI</span>
       </div>
     </div>
+
+    <!-- FICHA: oculta hasta pulsar “Solución” -->
+    <div id="detalles" class="invisible ficha-contenido">
+      <div class="ficha-imagen">
+        <img id="imagen" class="hidden" alt=""/>
+      </div>
+      <div class="ficha-texto">
+        <div class="anio" id="anio"></div>
+        <div id="descripcion"></div>
+        <p id="texto-extra" class="hidden"></p>
+      </div>
+    </div>
   </div>
 
   <!-- Controles de audio -->
@@ -97,13 +81,13 @@
     <button onclick="mostrarSolucion()" id="btnSolucion" title="Atajo: Enter">🎯 Solución</button>
   </div>
 
-  <!-- Botones de navegación -->
+  <!-- Navegación -->
   <div id="botones">
     <button onclick="anterior()" id="btnAnterior" title="Atajo: ← (flecha izquierda)">⬅ Anterior</button>
     <button onclick="siguiente()" id="btnSiguiente" title="Atajo: → (flecha derecha)">Siguiente ➡</button>
   </div>
 
-  <!-- Mensaje final -->
+  <!-- Final -->
   <div id="reinicio" class="hidden">
     <p>Has escuchado todas las obras.</p>
     <p><strong>Recarga manualmente la página para volver a empezar.</strong></p>
@@ -114,6 +98,5 @@
 <div id="boton-reglas-global" onclick="abrirReglas()">📖 Reglas del juego</div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
