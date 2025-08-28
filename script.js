@@ -80,21 +80,27 @@ function seleccionarModo(modo) {
 
 function mostrar() {
   if (datos.length === 0) return;
+
   const item = datos[indice];
   const titulo = document.getElementById("titulo");
   const detalles = document.getElementById("detalles");
+  const leyenda = document.getElementById("leyenda");
   const botones = document.getElementById("botones");
   const solucion = document.getElementById("botonSolucion");
   const img = document.getElementById("imagen");
   const textoExtra = document.getElementById("texto-extra");
 
   document.getElementById("audio-container").innerHTML = "";
-  detalles.classList.add("invisible");
-  solucion.classList.add("hidden");
-  botones.style.display = "none";
   document.body.style.backgroundColor = "#dcdcdc";
+  botones.style.display = "none";
+  solucion.classList.add("hidden");
 
-  // Título de obra
+  // Por defecto: leyenda visible, ficha oculta
+  leyenda.style.display = "flex";
+  detalles.style.display = "none";
+  detalles.classList.add("invisible");
+
+  // Título
   titulo.innerHTML = `Obra ${indice + 1}`;
 
   // Audio
@@ -102,6 +108,7 @@ function mostrar() {
   audioGlobal.currentTime = 0;
   audioGlobal.play();
 
+  // Controles
   const cont = document.createElement("div");
   cont.className = "custom-audio-controls";
   cont.innerHTML = `
@@ -112,61 +119,43 @@ function mostrar() {
   document.getElementById("audio-container").appendChild(cont);
   lucide.createIcons();
 
-  document.getElementById("btnRew").onclick = () => {
-    audioGlobal.currentTime = Math.max(0, audioGlobal.currentTime - 5);
-  };
-  document.getElementById("btnFf").onclick = () => {
-    audioGlobal.currentTime = Math.min(audioGlobal.duration, audioGlobal.currentTime + 5);
-  };
+  document.getElementById("btnRew").onclick = () => { audioGlobal.currentTime = Math.max(0, audioGlobal.currentTime - 5); };
+  document.getElementById("btnFf").onclick = () => { audioGlobal.currentTime = Math.min(audioGlobal.duration, audioGlobal.currentTime + 5); };
   document.getElementById("btnPlayPause").onclick = () => {
     const boton = document.getElementById("btnPlayPause");
     if (audioGlobal.paused) {
-      audioGlobal.play().then(() => {
-        boton.innerHTML = '<i data-lucide="pause"></i>';
-        lucide.createIcons();
-      });
+      audioGlobal.play().then(() => { boton.innerHTML = '<i data-lucide="pause"></i>'; lucide.createIcons(); });
     } else {
       audioGlobal.pause();
       boton.innerHTML = '<i data-lucide="play"></i>';
       lucide.createIcons();
     }
   };
+  audioGlobal.onpause = () => { document.getElementById("btnPlayPause").innerHTML = '<i data-lucide="play"></i>'; lucide.createIcons(); };
+  audioGlobal.onplay  = () => { document.getElementById("btnPlayPause").innerHTML = '<i data-lucide="pause"></i>'; lucide.createIcons(); };
 
-  audioGlobal.onpause = () => {
-    const boton = document.getElementById("btnPlayPause");
-    boton.innerHTML = '<i data-lucide="play"></i>';
-    lucide.createIcons();
-  };
-  audioGlobal.onplay = () => {
-    const boton = document.getElementById("btnPlayPause");
-    boton.innerHTML = '<i data-lucide="pause"></i>';
-    lucide.createIcons();
-  };
-
-  // Si ya estaba revelada la solución
+  // Si ya estaba revelada la solución, muestra ficha y oculta leyenda
   if (solucionMostrada[indice]) {
-    document.getElementById("anio").textContent = item.año;
-    document.getElementById("descripcion").innerHTML = `<strong>${item.autor}</strong><br>${item.obra}`;
+    document.getElementById("anio").textContent = item.año || "";
+    document.getElementById("descripcion").innerHTML = `<strong>${item.autor || ""}</strong><br>${item.obra || ""}`;
+
     img.classList.add("hidden");
-    img.src = "";
+    img.removeAttribute("src");
     img.alt = "";
     img.onload = () => img.classList.remove("hidden");
+    if (item.imagen) { img.src = item.imagen; img.alt = item.obra || ""; }
 
-    img.src = item.imagen;
-    img.alt = item.obra;
-    img.classList.remove("hidden");
+    if (item.texto && item.texto.trim()) { textoExtra.textContent = item.texto; textoExtra.classList.remove("hidden"); }
+    else { textoExtra.textContent = ""; textoExtra.classList.add("hidden"); }
 
-    if (item.texto) {
-      textoExtra.textContent = item.texto;
-      textoExtra.classList.remove("hidden");
-    } else {
-      textoExtra.classList.add("hidden");
-    }
+    leyenda.style.display = "none";
+    detalles.style.display = "flex";
+    detalles.classList.remove("invisible");
 
-    detalles.classList.remove("hidden", "invisible");
-    if (item.color) document.body.style.backgroundColor = item.color;
+    if (item.color && item.color.trim()) document.body.style.backgroundColor = item.color;
     botones.style.display = "flex";
   } else {
+    // si NO hay solución, enseña el botón para revelarla
     solucion.classList.remove("hidden");
   }
 }
@@ -177,49 +166,35 @@ function mostrarSolucion() {
   const item = datos[indice];
   solucionMostrada[indice] = true;
 
-  // Ocultar la leyenda previa (mismo hueco que la ficha)
   const leyenda = document.getElementById("leyenda");
-  if (leyenda) leyenda.style.display = "none";
+  const detalles = document.getElementById("detalles");
+  const img = document.getElementById("imagen");
+  const textoExtra = document.getElementById("texto-extra");
 
-  // Rellenar textos
+  // Textos
   document.getElementById("anio").textContent = item.año || "";
   document.getElementById("descripcion").innerHTML = `<strong>${item.autor || ""}</strong><br>${item.obra || ""}`;
 
-  // Texto extra (opcional)
-  const textoExtra = document.getElementById("texto-extra");
-  if (item.texto && item.texto.trim() !== "") {
-    textoExtra.textContent = item.texto;
-    textoExtra.classList.remove("hidden");
-  } else {
-    textoExtra.classList.add("hidden");
-    textoExtra.textContent = "";
-  }
+  // Imagen (precarga)
+  img.classList.add("hidden");
+  img.removeAttribute("src");
+  img.alt = "";
+  img.onload = () => img.classList.remove("hidden");
+  if (item.imagen && item.imagen.trim()) { img.src = item.imagen; img.alt = item.obra || ""; }
 
-  // Imagen (precarga para evitar que se vea la anterior)
-  const img = document.getElementById("imagen");
-  if (img) {
-    img.classList.add("hidden");
-    img.removeAttribute("src");
-    img.alt = "";
-    img.onload = () => img.classList.remove("hidden");
-    if (item.imagen && item.imagen.trim() !== "") {
-      img.src = item.imagen;
-      img.alt = item.obra || "";
-    }
-  }
+  // Texto extra
+  if (item.texto && item.texto.trim()) { textoExtra.textContent = item.texto; textoExtra.classList.remove("hidden"); }
+  else { textoExtra.textContent = ""; textoExtra.classList.add("hidden"); }
 
-  // Mostrar ficha y actualizar color de fondo
-  const detalles = document.getElementById("detalles");
-  if (detalles) detalles.classList.remove("invisible");
-  if (item.color && item.color.trim() !== "") {
-    document.body.style.backgroundColor = item.color;
-  }
+  // Conmutar visibilidad (leyenda fuera, ficha dentro y centrada)
+  leyenda.style.display = "none";
+  detalles.style.display = "flex";
+  detalles.classList.remove("invisible");
 
-  // UI: ocultar botón "Solución" y mostrar navegación
-  const contSol = document.getElementById("botonSolucion");
-  if (contSol) contSol.classList.add("hidden");
-  const nav = document.getElementById("botones");
-  if (nav) nav.style.display = "flex";
+  // Fondo y UI
+  if (item.color && item.color.trim()) document.body.style.backgroundColor = item.color;
+  document.getElementById("botonSolucion").classList.add("hidden");
+  document.getElementById("botones").style.display = "flex";
 }
 
 function siguiente() {
