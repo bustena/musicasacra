@@ -41,8 +41,10 @@ window.onload = async () => {
 
     if (!datos.length) throw new Error("No hay filas válidas en 'obras'.");
 
+    // Barajar y guardar copia base (antes de limitar por modo)
     datos.sort(() => Math.random() - 0.5);
     solucionMostrada = new Array(datos.length).fill(false);
+    window._datosBase = datos.slice();
 
     // PERIODOS (P_sacra)
     try {
@@ -57,9 +59,7 @@ window.onload = async () => {
         }))
         .filter(x => x.hex && x.label);
 
-      if (arr.length >= 5) {
-        PERIODOS = arr.sort((a,b) => (a.orden||0) - (b.orden||0));
-      }
+      if (arr.length >= 5) PERIODOS = arr.sort((a,b) => (a.orden||0) - (b.orden||0));
     } catch (e) {
       console.warn("No se pudo cargar 'P_sacra'; usando PERIODOS por defecto.", e);
     }
@@ -123,9 +123,7 @@ function seleccionarModo(modo) {
 
   // Limitar número de audiciones según modo
   const limite = (modoJuego === "solitario") ? 10 : 30;
-  // si guardas el conjunto completo, usa datosBase; si no, re-slice sobre datos barajados:
-  // (mejor: guarda una copia al cargar)
-  if (!window._datosBase) window._datosBase = datos.slice(); // guarda copia una vez
+  if (!window._datosBase) window._datosBase = datos.slice();
   datos = window._datosBase.slice(0, limite);
   solucionMostrada = new Array(datos.length).fill(false);
   indice = 0;
@@ -251,6 +249,9 @@ function mostrar() {
 
   titulo.textContent = `Obra ${indice + 1}`;
   feedback.textContent = "";
+  feedback.style.color = "#000";
+  feedback.style.fontWeight = "700";
+
   botones.style.display = "none";
   document.body.style.backgroundColor = "#dcdcdc";
 
@@ -347,7 +348,8 @@ function onElegirColorSolitario(e) {
 
   const fb = document.getElementById("feedback");
   fb.textContent = ok ? "✔ ¡Correcto!" : "✖ Incorrecto";
-  fb.style.color = ok ? "#1a7f37" : "#b4232d";
+  fb.style.color = "#000";
+  fb.style.fontWeight = "700";
 
   solucionMostrada[indice] = true;
   rellenarFicha(datos[indice]);
