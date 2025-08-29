@@ -6,6 +6,8 @@ body{
   margin:0;
   background:#dcdcdc;
   transition:background-color 1s ease;
+  /* espacio para la barra fija inferior */
+  padding-bottom: 84px;
 }
 
 /* ================= CABECERA ================= */
@@ -19,9 +21,20 @@ header .header-link{display:inline-flex;align-items:center;gap:.6em;text-decorat
 /* ================= PANTALLAS / BARRA SUPERIOR ================= */
 #contenido,#menuModos,#cargando{padding:2em 1em;}
 .cuarteto-numero{font-size:2em;font-weight:700;margin:0;}
-.barra-superior{max-width:700px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:.75em;}
-.marcadores{font-weight:600;}
-.feedback{height:1.6em;margin:.3em auto 0;max-width:700px;font-weight:700;}
+
+/* Centramos el título y colocamos los marcadores a la derecha */
+.barra-superior{
+  max-width:700px;margin:0 auto;
+  display:flex;align-items:center;justify-content:center;gap:.75em;
+  position: relative;
+}
+.marcadores{
+  font-weight:600;
+  position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+}
+.feedback{
+  min-height:1.6em;margin:.3em auto 0;max-width:700px;font-weight:700;color:#000;
+}
 
 #detalles{min-height:4em;transition:opacity .3s ease;}
 .invisible{opacity:0;visibility:hidden;}
@@ -35,7 +48,10 @@ button{
 button:hover{background:#444;}
 
 /* ================= AUDIO ================= */
-#audio-container{margin:1em auto;width:95%;max-width:500px;transition:all .5s ease;}
+#audio-container{
+  margin:1em auto 2.5em; /* más aire por la barra fija */
+  width:95%;max-width:500px;transition:all .5s ease;
+}
 .custom-audio-controls{display:flex;justify-content:center;align-items:center;gap:1em;margin-top:.5em;}
 .audio-btn{background:#222;border:none;border-radius:10px;padding:.6em;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background-color .2s;box-shadow:2px 2px 6px rgba(0,0,0,.2);}
 .audio-btn:hover{background:#444;}
@@ -67,64 +83,26 @@ button:hover{background:#444;}
 #texto-extra{font-size:1rem;line-height:1.6;margin-top:.5em;color:#222;}
 
 /* =========================================================
-   LEYENDA (5 líneas apiladas) + estilos Solitario/Mesa
+   LEYENDA (5 filas + info por fila)
    ========================================================= */
-/* Contenedor leyenda SIEMPRE columna (apila 5 items) */
-/* Leyenda: 5 filas */
-#leyenda {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 0.6em;
-  max-width: 700px;
-  width: 100%;
-  margin: 1.5em auto;
+#leyenda{
+  display:flex;flex-direction:column;align-items:stretch;gap:.6em;
+  max-width:700px;width:100%;margin:1.5em auto;text-align:left;
 }
-
-.leyenda-row { width: 100%; }
-
-/* Botón de periodo */
-#leyenda .leyenda-item {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 0.6em;
-  width: 100%;
-  position: relative;
-  padding: 0.6em 3.2em 0.6em 1em;
-  border-radius: 8px;
-  background: #222;
-  color: #fff;
-  text-align: left;
+.leyenda-row{width:100%;}
+#leyenda .leyenda-item{
+  display:flex;align-items:center;justify-content:flex-start;gap:.6em;width:100%;
+  position:relative;padding:.6em 3.2em .6em 1em;border-radius:8px;background:#222;color:#fff;text-align:left;
 }
-#leyenda .leyenda-item:hover { background: #444; }
-
-/* Punto de color con aire antes del texto */
-.leyenda-item .punto{
-  width:14px;height:14px;border-radius:50%;display:inline-block;
-  margin-right: 14px;
-}
-
-/* Botón ⓘ a la derecha del botón de periodo */
-.info-btn{
-  position:absolute;right:.6em;top:50%;transform:translateY(-50%);
-  background:#000;color:#fff;border:none;border-radius:8px;padding:.2em .5em;font-weight:700;cursor:pointer;
-}
+#leyenda .leyenda-item:hover{background:#444;}
+.leyenda-item .punto{width:14px;height:14px;border-radius:50%;display:inline-block;margin-right:14px;}
+.info-btn{position:absolute;right:.6em;top:50%;transform:translateY(-50%);background:#000;color:#fff;border:none;border-radius:8px;padding:.2em .5em;font-weight:700;cursor:pointer;}
 .info-btn:hover{background:#111;}
-
-/* Panel de descripción bajo cada fila (colapsable) */
 .info-panel{
-  max-width: 100%;
-  padding: .7em 1em;
-  border-radius: 8px;
-  background: rgba(255,255,255,0.9);
-  color:#222;
-  margin: .4em 0 .2em 0;
-  text-align: left;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  max-width:100%;padding:.7em 1em;border-radius:8px;background:rgba(255,255,255,.9);color:#222;margin:.4em 0 .2em 0;text-align:left;box-shadow:0 2px 6px rgba(0,0,0,.15);
 }
 
-/* Modo Mesa: lista plana (mantiene ⓘ y panel) */
+/* Modo Mesa: leyenda como lista plana */
 #leyenda.modo-mesa .leyenda-item{
   background:transparent !important;color:inherit !important;border:0 !important;
   box-shadow:none !important;padding:.2em 2.6em .2em 0 !important;border-radius:0 !important;cursor:default !important;
@@ -137,27 +115,17 @@ button:hover{background:#444;}
 .is-wrong  {border:2px solid #b4232d;}
 
 /* =========================================================
-   PISTA (modo solitario)
+   PISTA
    ========================================================= */
-#pista-wrap{
-  display:flex;
-  flex-direction:column;   /* botón arriba, caja debajo */
-  align-items:center;      /* centrado horizontal */
-  gap:.8em;
-  margin-top:1em;
-}
+#pista-wrap{display:flex;flex-direction:column;align-items:center;gap:.8em;margin-top:1em;}
 #btnPista{padding:.6em 1.2em;font-size:1em;font-weight:600;}
 #pistaBox{
-  max-width:700px;
-  padding:.8em 1.2em;
-  border-radius:8px;
-  background:rgba(255,255,255,.85);
-  font-size:.95rem;line-height:1.5;color:#222;text-align:left;
-  box-shadow:0 2px 6px rgba(0,0,0,.15);
+  max-width:700px;padding:.8em 1.2em;border-radius:8px;background:rgba(255,255,255,.85);
+  font-size:.95rem;line-height:1.5;color:#222;text-align:left;box-shadow:0 2px 6px rgba(0,0,0,.15);
 }
 
 /* =========================================================
-   MODAL Periodos
+   MODAL
    ========================================================= */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:2000;}
 .modal.hidden{display:none;}
