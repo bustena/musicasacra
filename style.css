@@ -70,68 +70,67 @@ button:hover{background:#444;}
    LEYENDA (5 líneas apiladas) + estilos Solitario/Mesa
    ========================================================= */
 /* Contenedor leyenda SIEMPRE columna (apila 5 items) */
-#leyenda{
-  display:flex;
-  flex-direction:column;    /* <- clave: apila en vertical */
-  align-items:flex-start;   /* texto a la izquierda */
-  gap:.6em;
-  max-width:700px;
-  width:100%;
-  margin:1.5em auto;
-  text-align:left;
+/* Leyenda: 5 filas */
+#leyenda {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.6em;
+  max-width: 700px;
+  width: 100%;
+  margin: 1.5em auto;
 }
 
-/* Cada item de leyenda es una fila: punto + texto + (ⓘ) */
-#leyenda .leyenda-item{
-  display:flex;             /* fila interna */
-  flex-direction:row;
-  align-items:center;
-  width:100%;
-  position:relative;
-  padding:.6em 3.2em .6em 1em;
-  border-radius:8px;
-  background:#222;          /* aspecto botón (Solitario) */
-  color:#fff;
-}
-#leyenda .leyenda-item:hover{background:#444;}
+.leyenda-row { width: 100%; }
 
-.leyenda-item .punto {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  display: inline-block;
-  margin-right: 14px; /* separa el punto de la etiqueta */
-}
-
-.info-btn {
-  position: absolute;
-  right: .6em;
-  top: 50%;
-  transform: translateY(-50%);
-  background: #000;
-  color: #fff;
-  border: none;
+/* Botón de periodo */
+#leyenda .leyenda-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.6em;
+  width: 100%;
+  position: relative;
+  padding: 0.6em 3.2em 0.6em 1em;
   border-radius: 8px;
-  padding: .2em .5em;
-  font-weight: 700;
-  cursor: pointer;
+  background: #222;
+  color: #fff;
+  text-align: left;
+}
+#leyenda .leyenda-item:hover { background: #444; }
+
+/* Punto de color con aire antes del texto */
+.leyenda-item .punto{
+  width:14px;height:14px;border-radius:50%;display:inline-block;
+  margin-right: 14px;
 }
 
-/* Modo Mesa: que NO parezcan botones (lista simple) */
-# leyenda.modo-mesa{} /* evita errores si alguien copia-línea */
+/* Botón ⓘ a la derecha del botón de periodo */
+.info-btn{
+  position:absolute;right:.6em;top:50%;transform:translateY(-50%);
+  background:#000;color:#fff;border:none;border-radius:8px;padding:.2em .5em;font-weight:700;cursor:pointer;
+}
+.info-btn:hover{background:#111;}
 
-/* Importante: selector correcto */
+/* Panel de descripción bajo cada fila (colapsable) */
+.info-panel{
+  max-width: 100%;
+  padding: .7em 1em;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.9);
+  color:#222;
+  margin: .4em 0 .2em 0;
+  text-align: left;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* Modo Mesa: lista plana (mantiene ⓘ y panel) */
 #leyenda.modo-mesa .leyenda-item{
-  background:transparent !important;
-  color:inherit !important;
-  border:0 !important;
-  box-shadow:none !important;
-  padding:.2em 0 .2em 0 !important;
-  border-radius:0 !important;
-  cursor:default !important;
+  background:transparent !important;color:inherit !important;border:0 !important;
+  box-shadow:none !important;padding:.2em 2.6em .2em 0 !important;border-radius:0 !important;cursor:default !important;
 }
 #leyenda.modo-mesa .leyenda-item:hover{background:transparent !important;}
-#leyenda.modo-mesa .info-btn{background:#666;} /* mantenemos ⓘ visible */
+#leyenda.modo-mesa .info-btn{background:#666;}
 
 /* Feedback visual (Solitario) */
 .is-correct{border:2px solid #1a7f37;}
