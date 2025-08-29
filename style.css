@@ -22,7 +22,6 @@ header .header-link{display:inline-flex;align-items:center;gap:.6em;text-decorat
 #contenido,#menuModos,#cargando{padding:2em 1em;}
 .cuarteto-numero{font-size:2em;font-weight:700;margin:0;}
 
-/* Centramos el título y colocamos los marcadores a la derecha */
 .barra-superior{
   max-width:700px;margin:0 auto;
   display:flex;align-items:center;justify-content:center;gap:.75em;
@@ -32,6 +31,7 @@ header .header-link{display:inline-flex;align-items:center;gap:.6em;text-decorat
   font-weight:600;
   position: absolute; right: 0; top: 50%; transform: translateY(-50%);
 }
+
 .feedback{
   min-height:1.6em;margin:.3em auto 0;max-width:700px;font-weight:700;color:#000;
 }
@@ -115,13 +115,26 @@ button:hover{background:#444;}
 .is-wrong  {border:2px solid #b4232d;}
 
 /* =========================================================
-   PISTA
+   PISTA (centrada antes y después de abrir)
    ========================================================= */
-#pista-wrap{display:flex;flex-direction:column;align-items:center;gap:.8em;margin-top:1em;}
-#btnPista{padding:.6em 1.2em;font-size:1em;font-weight:600;}
+#pista-wrap{
+  /* centramos el propio bloque dentro de #leyenda */
+  align-self: center;      /* CLAVE: evita el estiramiento a todo el ancho */
+  width: auto;
+
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:.8em;margin:1em 0;
+}
+#btnPista{
+  padding:.6em 1.2em;font-size:1em;border:none;border-radius:10px;background:#444;color:#fff;font-weight:600;
+  box-shadow:2px 2px 6px rgba(0,0,0,.2);cursor:pointer;transition:background-color .2s ease;
+  margin:0 auto;display:inline-block; /* asegura centrado */
+}
+#btnPista:hover{background:#666;}
 #pistaBox{
-  max-width:700px;padding:.8em 1.2em;border-radius:8px;background:rgba(255,255,255,.85);
-  font-size:.95rem;line-height:1.5;color:#222;text-align:left;box-shadow:0 2px 6px rgba(0,0,0,.15);
+  align-self:center;       /* CLAVE: caja centrada en el contenedor flex */
+  max-width:700px;margin-top:.8em;padding:.8em 1.2em;border-radius:8px;background:rgba(255,255,255,.85);
+  font-size:.95rem;line-height:1.5;color:#222;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.15);
 }
 
 /* =========================================================
@@ -136,52 +149,6 @@ button:hover{background:#444;}
 .modal-body{display:flex;gap:1em;padding:1em 1.1em 1.2em;text-align:left;align-items:flex-start;}
 .modal-color{width:20px;height:20px;border-radius:50%;margin-top:.25em;flex:0 0 auto;}
 .modal-texto{flex:1;}
-
-/* Contenedor del botón Pista */
-#pista-wrap {
-  display: flex;
-  flex-direction: column;   /* botón arriba, caja debajo */
-  align-items: center;      /* centra horizontalmente */
-  justify-content: center;  /* asegura centrado */
-  gap: 0.8em;
-  margin: 1em auto;
-  width: 100%;
-}
-
-/* Botón de pista */
-#btnPista {
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  border: none;
-  border-radius: 10px;
-  background-color: #444;
-  color: #fff;
-  font-weight: 600;
-  box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-
-  /* añadido para centrar */
-  margin: 0 auto;
-  display: inline-block;
-}
-
-#btnPista:hover {
-  background-color: #666;
-}
-
-/* Caja de pista debajo del botón */
-/* Caja de pista */
-#pistaBox {
-  max-width: 600px;
-  margin: 0.5em auto 0 auto;  /* centra la caja */
-  padding: 0.8em 1em;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 8px;
-  font-size: 0.95rem;
-  line-height: 1.4;
-  text-align: center; /* centrado del texto */
-}
 
 /* ================= RESPONSIVO ================= */
 @media (max-width:700px){
