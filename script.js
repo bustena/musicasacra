@@ -128,17 +128,21 @@ function seleccionarModo(modo) {
   solucionMostrada = new Array(datos.length).fill(false);
   indice = 0;
 
-if (modoJuego === "solitario") {
-  puntos = 0; racha = 0; rachaMax = 0; pintarMarcadores();
-  document.getElementById("marcadores").style.display = "block";
-  document.getElementById("botonSolucion").classList.add("hidden");
-} else {
-  document.getElementById("marcadores").style.display = "none";
-  document.getElementById("botonSolucion").classList.remove("hidden");
-}
-// En ambos modos, botón de pista siempre visible
-const pw = document.getElementById("pista-wrap");
-if (pw) { pw.classList.remove("hidden"); pw.style.display = "block"; }
+  if (modoJuego === "solitario") {
+    puntos = 0; racha = 0; rachaMax = 0; pintarMarcadores();
+    document.getElementById("marcadores").style.display = "block";
+    document.getElementById("botonSolucion").classList.add("hidden");
+  } else {
+    document.getElementById("marcadores").style.display = "none";
+    document.getElementById("botonSolucion").classList.remove("hidden");
+  }
+
+  // En ambos modos, botón de pista siempre visible
+  const pw = document.getElementById("pista-wrap");
+  if (pw) {
+    pw.classList.remove("hidden");
+    pw.style.display = ""; // deja que el CSS (display:flex) actúe
+  }
 
   mostrar();
 }
@@ -369,25 +373,28 @@ function prepararLeyendaParaModo() {
   // reset
   botones.forEach((b) => {
     b.disabled = false;
-    b.classList.remove("is-correct","is-wrong");
+    b.classList.remove("is-correct", "is-wrong");
     b.style.boxShadow = "none";
     b.onclick = null;
     b.setAttribute("title", b.querySelector(".leyenda-txt")?.textContent || "");
   });
 
-if (modoJuego === "solitario") {
-  leyendaBox.classList.remove("modo-mesa");
-  botones.forEach((b) => { b.onclick = onElegirColorSolitario; });
-  document.getElementById("marcadores").style.display = "block";
-} else {
-  leyendaBox.classList.add("modo-mesa");
-  botones.forEach((b) => { b.onclick = null; });
-  document.getElementById("marcadores").style.display = "none";
-}
-// Botón de pista visible en ambos modos
-const pw = document.getElementById("pista-wrap");
-if (pw) { pw.classList.remove("hidden"); pw.style.display = "block"; }
+  if (modoJuego === "solitario") {
+    leyendaBox.classList.remove("modo-mesa");
+    botones.forEach((b) => { b.onclick = onElegirColorSolitario; });
+    document.getElementById("marcadores").style.display = "block";
+  } else {
+    leyendaBox.classList.add("modo-mesa");
+    botones.forEach((b) => { b.onclick = null; });
+    document.getElementById("marcadores").style.display = "none";
+  }
 
+  // Botón de pista visible en ambos modos (deja que el CSS aplique display:flex)
+  const pw = document.getElementById("pista-wrap");
+  if (pw) {
+    pw.classList.remove("hidden");
+    pw.style.display = ""; // no pisar el display:flex del CSS
+  }
 }
 
 function marcarLeyendaTrasRespuesta(hexCorrecto, hexElegido, acierto) {
