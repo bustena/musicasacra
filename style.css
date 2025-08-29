@@ -171,14 +171,16 @@ button:hover{background:#444;}
 }
 
 /* Caja de pista debajo del botón */
+/* Caja de pista */
 #pistaBox {
-  margin-top: 0.8em;
-  font-size: 1rem;
-  line-height: 1.5;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-  color: #222;
+  max-width: 600px;
+  margin: 0.5em auto 0 auto;  /* centra la caja */
+  padding: 0.8em 1em;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  text-align: center; /* centrado del texto */
 }
 
 /* ================= RESPONSIVO ================= */
