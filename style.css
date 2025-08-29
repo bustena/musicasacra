@@ -172,7 +172,7 @@ button:hover {
 }
 
 /* =========================================================
-   FICHA DE SOLUCIÓN (imagen + texto)
+   CONTENEDOR COMÚN (leyenda o ficha ocupan el mismo hueco)
    ========================================================= */
 .ficha-detalle {
   margin: 1.5em auto;
@@ -180,8 +180,8 @@ button:hover {
   border-radius: 14px;
   display: flex;
   justify-content: center;
-  transition: opacity 0.3s ease;
   width: 100%;
+  transition: opacity 0.3s ease;
 }
 
 .ficha-contenido {
@@ -192,6 +192,9 @@ button:hover {
   align-items: center;
 }
 
+/* =========================================================
+   FICHA DE SOLUCIÓN (imagen + texto)
+   ========================================================= */
 .ficha-imagen {
   flex: 0 0 40%;
   display: flex;
@@ -237,25 +240,17 @@ button:hover {
 }
 
 /* =========================================================
-   LEYENDA (aparece antes de la solución)
+   LEYENDA (5 líneas apiladas, mismo ancho que la ficha)
    ========================================================= */
-.leyenda-contenedor {
-  margin: 1.5em auto;
-  padding: 1.5em;
-  border-radius: 14px;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.leyenda {
-  max-width: 700px;
-  width: 100%;
-  min-height: 220px; /* igual que altura de imagen aprox */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+#leyenda {
+  display: flex;              /* importante: flex para controlar dirección */
+  flex-direction: column;     /* 5 líneas, una debajo de otra */
+  align-items: flex-start;    /* alineado a la izquierda */
+  justify-content: center;    /* centrado vertical en el hueco */
   gap: 0.6em;
+  max-width: 700px;           /* igual que .ficha-contenido */
+  width: 100%;
+  min-height: 220px;          /* altura aproximada de la imagen */
   text-align: left;
 }
 
@@ -273,11 +268,6 @@ button:hover {
   height: 14px;
   border-radius: 50%;
   display: inline-block;
-}
-
-/* Ocultar leyenda automáticamente cuando hay solución */
-#detalles:not(.invisible) ~ #leyenda {
-  display: none;
 }
 
 /* ================= RESPONSIVO ================= */
@@ -299,7 +289,8 @@ button:hover {
     padding-top: 1em;
   }
 
-  .leyenda {
+  #leyenda {
+    align-items: center;   /* centramos en móvil */
     text-align: center;
   }
   .leyenda-item {
