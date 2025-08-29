@@ -32,35 +32,60 @@
 
 <!-- Contenido principal -->
 <div id="contenido" class="hidden">
-  <div id="titulo" class="cuarteto-numero"></div>
+  <!-- Cabecera de juego: título + marcadores -->
+  <div style="max-width:700px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:.75em;">
+    <div id="titulo" class="cuarteto-numero">Obra</div>
+    <div id="marcadores" aria-live="polite" style="font-weight:600;">
+      <span>Puntos: <span id="puntos">0</span></span> •
+      <span>Racha: <span id="racha">0</span></span> (<span id="rachaMax">0</span>)
+    </div>
+  </div>
 
-  <!-- Contenedor común: leyenda (por defecto) y ficha de solución -->
+  <!-- Feedback de acierto/fallo -->
+  <div id="feedback" style="height:1.6em;margin:.2em auto 0;max-width:700px;font-weight:700;"></div>
+
+  <!-- Contenedor común: leyenda (botones) y ficha de solución -->
   <div class="ficha-detalle">
-    <!-- LEYENDA: visible por defecto, ocupa el mismo espacio que la ficha -->
-    <div id="leyenda" class="ficha-contenido">
-      <div class="leyenda-item">
+    <!-- LEYENDA: en solitario son botones; en mesa actuará como guía (JS lo manejará) -->
+    <div id="leyenda" class="ficha-contenido" role="group" aria-label="Elige periodo">
+      <!-- Cada línea es un botón accesible con color y texto -->
+      <button class="leyenda-item leyenda-btn"
+              data-hex="#5ca8d6"
+              aria-label="Edad Media y Renacimiento (hasta 1500)">
         <span class="punto" style="background:#5ca8d6"></span>
-        <span>Edad Media y Renacimiento (hasta 1500)</span>
-      </div>
-      <div class="leyenda-item">
+        <span class="leyenda-txt">Edad Media y Renacimiento (hasta 1500)</span>
+      </button>
+
+      <button class="leyenda-item leyenda-btn"
+              data-hex="#f9c623"
+              aria-label="Renacimiento y Barroco temprano (hasta 1640)">
         <span class="punto" style="background:#f9c623"></span>
-        <span>Renacimiento y Barroco temprano (hasta 1640)</span>
-      </div>
-      <div class="leyenda-item">
+        <span class="leyenda-txt">Renacimiento y Barroco temprano (hasta 1640)</span>
+      </button>
+
+      <button class="leyenda-item leyenda-btn"
+              data-hex="#e06464"
+              aria-label="Barroco tardío (hasta 1750)">
         <span class="punto" style="background:#e06464"></span>
-        <span>Barroco tardío (hasta 1750)</span>
-      </div>
-      <div class="leyenda-item">
+        <span class="leyenda-txt">Barroco tardío (hasta 1750)</span>
+      </button>
+
+      <button class="leyenda-item leyenda-btn"
+              data-hex="#26b98f"
+              aria-label="Periodo clásico-romántico (hasta 1920)">
         <span class="punto" style="background:#26b98f"></span>
-        <span>Periodo clásico-romántico (hasta 1920)</span>
-      </div>
-      <div class="leyenda-item">
+        <span class="leyenda-txt">Periodo clásico-romántico (hasta 1920)</span>
+      </button>
+
+      <button class="leyenda-item leyenda-btn"
+              data-hex="#c87ab0"
+              aria-label="Siglos XX y XXI">
         <span class="punto" style="background:#c87ab0"></span>
-        <span>Siglos XX y XXI</span>
-      </div>
+        <span class="leyenda-txt">Siglos XX y XXI</span>
+      </button>
     </div>
 
-    <!-- FICHA: oculta hasta pulsar “Solución” -->
+    <!-- FICHA: oculta hasta responder -->
     <div id="detalles" class="invisible ficha-contenido">
       <div class="ficha-imagen">
         <img id="imagen" class="hidden" alt=""/>
@@ -76,7 +101,7 @@
   <!-- Controles de audio -->
   <div id="audio-container"></div>
 
-  <!-- Botón solución -->
+  <!-- Botón solución (solo para modo Mesa; en Solitario no se mostrará) -->
   <div id="botonSolucion">
     <button onclick="mostrarSolucion()" id="btnSolucion" title="Atajo: Enter">🎯 Solución</button>
   </div>
