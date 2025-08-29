@@ -198,23 +198,35 @@ function onElegirColorSolitario(e) {
 }
 
 function prepararLeyendaParaModo() {
+  const leyendaBox = document.getElementById("leyenda");
   const botones = getLeyendaBotones();
+
+  // reset común
   botones.forEach((b) => {
     b.disabled = false;
-    b.classList.remove("is-correct","is-wrong");
+    b.classList.remove("is-correct","is-wrong","leyenda-btn");
     b.style.boxShadow = "none";
+    b.onclick = null;
+    b.removeAttribute("aria-disabled");
+    b.removeAttribute("tabindex");
   });
 
   if (modoJuego === "solitario") {
+    leyendaBox.classList.remove("modo-mesa");
     botones.forEach((b) => {
-      b.onclick = onElegirColorSolitario;
       b.classList.add("leyenda-btn");
+      b.onclick = onElegirColorSolitario;
     });
+    document.getElementById("marcadores").style.display = "block";
   } else {
+    // MESA: lista plana, sin aspecto de botón ni hover
+    leyendaBox.classList.add("modo-mesa");
     botones.forEach((b) => {
-      b.onclick = null;
-      b.classList.remove("leyenda-btn"); // que no parezca botón
+      b.disabled = false;              // visualmente plano, no desactivado gris
+      b.setAttribute("aria-disabled","true");
+      b.setAttribute("tabindex","-1");
     });
+    document.getElementById("marcadores").style.display = "none";
   }
 }
 
