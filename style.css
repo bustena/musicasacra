@@ -1,324 +1,169 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
 
-body {
-  font-family: 'Quicksand', sans-serif;
-  text-align: center;
-  margin: 0;
-  background-color: #dcdcdc;
-  transition: background-color 1s ease;
+body{
+  font-family:'Quicksand',sans-serif;
+  text-align:center;
+  margin:0;
+  background:#dcdcdc;
+  transition:background-color 1s ease;
 }
 
 /* ================= CABECERA ================= */
-header {
-  padding: 1em;
-}
+header{padding:1em;}
+header .header-link{display:inline-flex;align-items:center;gap:.6em;text-decoration:none;color:inherit;}
+.logo-icon{width:36px;height:36px;}
+.titulo-principal{font-size:1.5em;font-weight:600;margin:0;}
 
-header .header-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6em;
-  text-decoration: none;
-  color: inherit;
-}
+.hidden{display:none;}
 
-.logo-icon {
-  width: 36px;
-  height: 36px;
-}
+/* ================= PANTALLAS / BARRA SUPERIOR ================= */
+#contenido,#menuModos,#cargando{padding:2em 1em;}
+.cuarteto-numero{font-size:2em;font-weight:700;margin:0;}
+.barra-superior{max-width:700px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:.75em;}
+.marcadores{font-weight:600;}
+.feedback{height:1.6em;margin:.3em auto 0;max-width:700px;font-weight:700;}
 
-.titulo-principal {
-  font-size: 1.5em;
-  font-weight: 600;
-  margin: 0;
-}
+#detalles{min-height:4em;transition:opacity .3s ease;}
+.invisible{opacity:0;visibility:hidden;}
 
-.hidden {
-  display: none;
+/* ================= BOTONES GENERALES ================= */
+button{
+  padding:.8em 1.5em;margin:.5em;font-size:1em;border:none;border-radius:10px;
+  background:#222;color:#fff;font-weight:600;box-shadow:2px 2px 6px rgba(0,0,0,.2);
+  cursor:pointer;transition:background-color .2s ease;
 }
-
-/* ================= PANTALLAS ================= */
-#contenido,
-#menuModos,
-#cargando {
-  padding: 2em 1em;
-}
-
-.anio {
-  font-size: 2.3em;
-  font-weight: 700;
-  margin-top: 0.2em;
-}
-
-.cuarteto-numero {
-  font-size: 2em;
-  font-weight: 700;
-  margin-bottom: 1em;
-}
-
-#detalles {
-  min-height: 4em;
-  transition: opacity 0.3s ease;
-}
-
-.invisible {
-  opacity: 0;
-  visibility: hidden;
-}
-
-/* ================= BOTONES ================= */
-button {
-  padding: 0.8em 1.5em;
-  margin: 0.5em;
-  font-size: 1em;
-  border: none;
-  border-radius: 10px;
-  background-color: #222;
-  color: white;
-  font-weight: 600;
-  box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-button:hover {
-  background-color: #444;
-}
+button:hover{background:#444;}
 
 /* ================= AUDIO ================= */
-#audio-container {
-  margin: 1em auto;
-  width: 95%;
-  max-width: 500px;
-  transition: all 0.5s ease;
-}
-
-.custom-audio-controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1em;
-  margin-top: 0.5em;
-}
-
-.audio-btn {
-  background-color: #222;
-  border: none;
-  border-radius: 10px;
-  padding: 0.6em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
-}
-
-.audio-btn:hover {
-  background-color: #444;
-}
-
-.audio-btn svg {
-  width: 28px;
-  height: 28px;
-  stroke: #fff;
-}
+#audio-container{margin:1em auto;width:95%;max-width:500px;transition:all .5s ease;}
+.custom-audio-controls{display:flex;justify-content:center;align-items:center;gap:1em;margin-top:.5em;}
+.audio-btn{background:#222;border:none;border-radius:10px;padding:.6em;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background-color .2s;box-shadow:2px 2px 6px rgba(0,0,0,.2);}
+.audio-btn:hover{background:#444;}
+.audio-btn svg{width:28px;height:28px;stroke:#fff;}
 
 /* ================= NAVEGACIÓN ================= */
-#botones {
-  display: none;
-  justify-content: center;
-  gap: 1em;
-  flex-wrap: wrap;
-}
-
-#botonSolucion {
-  margin-top: 1.2em;
-}
-
-#reinicio {
-  margin-top: 1.5em;
-}
+#botones{display:none;justify-content:center;gap:1em;flex-wrap:wrap;}
+#botonSolucion{margin-top:1.2em;}
+#reinicio{margin-top:1.5em;}
 
 /* ================= BOTÓN FIJO ================= */
-#boton-reglas-global {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  background-color: #555;
-  color: #fff;
-  padding: 1em;
-  font-weight: 600;
-  cursor: pointer;
-  z-index: 1000;
-  border-top: 2px solid #222;
-  transition: background-color 0.3s;
+#boton-reglas-global{
+  position:fixed;bottom:0;left:0;width:100%;text-align:center;background:#555;color:#fff;
+  padding:1em;font-weight:600;cursor:pointer;z-index:1000;border-top:2px solid #222;transition:background-color .3s;
 }
-
-#boton-reglas-global:hover {
-  background-color: #333;
-}
+#boton-reglas-global:hover{background:#333;}
 
 /* =========================================================
-   FICHA DE SOLUCIÓN (imagen + texto)
+   FICHA (imagen + texto)
    ========================================================= */
-.ficha-detalle {
-  margin: 1.5em auto;
-  padding: 1.5em;
-  border-radius: 14px;
-  display: flex;
-  justify-content: center;
-  transition: opacity 0.3s ease;
-  width: 100%;
-}
-
-.ficha-contenido {
-  display: flex;
-  gap: 1.5em;
-  max-width: 700px;
-  width: 100%;
-  align-items: center;
-}
-
-.ficha-imagen {
-  flex: 0 0 40%;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.ficha-imagen img {
-  display: block;
-  max-height: 220px; /* tamaño controlado */
-  width: auto;
-  border-radius: 8px;
-  box-shadow: none;
-}
-
-.ficha-texto {
-  flex: 0 0 60%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: left;
-  gap: 0.4em;
-}
-
-.ficha-texto .anio {
-  font-size: 2.2em;
-  font-weight: 700;
-  margin-bottom: 0.2em;
-}
-
-#descripcion {
-  font-size: 1.1rem;
-  line-height: 1.5;
-}
-#descripcion strong {
-  font-weight: 700;
-}
-
-#texto-extra {
-  font-size: 1rem;
-  line-height: 1.6;
-  margin-top: 0.5em;
-  color: #222;
-}
+.ficha-detalle{margin:1.5em auto;padding:1.5em;border-radius:14px;display:flex;justify-content:center;width:100%;transition:opacity .3s;}
+.ficha-contenido{display:flex;gap:1.5em;max-width:700px;width:100%;align-items:center;}
+.ficha-imagen{flex:0 0 40%;display:flex;justify-content:flex-end;}
+.ficha-imagen img{display:block;max-height:220px;width:auto;border-radius:8px;box-shadow:none;}
+.ficha-texto{flex:0 0 60%;display:flex;flex-direction:column;justify-content:center;text-align:left;gap:.4em;}
+.ficha-texto .anio{font-size:2.2em;font-weight:700;margin-bottom:.2em;}
+#descripcion{font-size:1.1rem;line-height:1.5;}
+#descripcion strong{font-weight:700;}
+#texto-extra{font-size:1rem;line-height:1.6;margin-top:.5em;color:#222;}
 
 /* =========================================================
-   LEYENDA (aparece antes de la solución)
+   LEYENDA (5 líneas apiladas) + estilos Solitario/Mesa
    ========================================================= */
-.leyenda-contenedor {
-  margin: 1.5em auto;
-  padding: 1.5em;
-  border-radius: 14px;
-  display: flex;
-  justify-content: center;
-  width: 100%;
+/* Contenedor leyenda SIEMPRE columna (apila 5 items) */
+#leyenda{
+  display:flex;
+  flex-direction:column;    /* <- clave: apila en vertical */
+  align-items:flex-start;   /* texto a la izquierda */
+  gap:.6em;
+  max-width:700px;
+  width:100%;
+  margin:1.5em auto;
+  text-align:left;
 }
 
-.leyenda {
-  display: flex;
-  flex-direction: column;  /* fuerza columna */
-  align-items: flex-start; /* textos alineados a la izquierda */
-  gap: 0.6em;
+/* Cada item de leyenda es una fila: punto + texto + (ⓘ) */
+#leyenda .leyenda-item{
+  display:flex;             /* fila interna */
+  flex-direction:row;
+  align-items:center;
+  width:100%;
+  position:relative;
+  padding:.6em 3.2em .6em 1em;
+  border-radius:8px;
+  background:#222;          /* aspecto botón (Solitario) */
+  color:#fff;
 }
+#leyenda .leyenda-item:hover{background:#444;}
 
-.leyenda-item {
-  display: flex;           /* cada ítem en fila: círculo + texto */
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
+.leyenda-item .punto{width:14px;height:14px;border-radius:50%;display:inline-block;}
+.info-btn{
+  position:absolute;right:.6em;top:50%;transform:translateY(-50%);
+  background:#000;color:#fff;border:none;border-radius:8px;padding:.2em .5em;font-weight:700;cursor:pointer;
 }
+.info-btn:hover{background:#111;}
 
-.leyenda-item .punto {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  display: inline-block;
-}
+/* Modo Mesa: que NO parezcan botones (lista simple) */
+# leyenda.modo-mesa{} /* evita errores si alguien copia-línea */
 
-/* Ocultar leyenda automáticamente cuando hay solución */
-#detalles:not(.invisible) ~ #leyenda {
-  display: none;
+/* Importante: selector correcto */
+#leyenda.modo-mesa .leyenda-item{
+  background:transparent !important;
+  color:inherit !important;
+  border:0 !important;
+  box-shadow:none !important;
+  padding:.2em 0 .2em 0 !important;
+  border-radius:0 !important;
+  cursor:default !important;
 }
+#leyenda.modo-mesa .leyenda-item:hover{background:transparent !important;}
+#leyenda.modo-mesa .info-btn{background:#666;} /* mantenemos ⓘ visible */
+
+/* Feedback visual (Solitario) */
+.is-correct{border:2px solid #1a7f37;}
+.is-wrong  {border:2px solid #b4232d;}
 
 /* =========================================================
    PISTA (modo solitario)
    ========================================================= */
-#pista-wrap {
-  display: flex;
-  flex-direction: column;   /* Botón arriba, caja debajo */
-  align-items: center;      /* Centrado horizontal */
-  gap: 0.8em;
-  margin-top: 1em;
+#pista-wrap{
+  display:flex;
+  flex-direction:column;   /* botón arriba, caja debajo */
+  align-items:center;      /* centrado horizontal */
+  gap:.8em;
+  margin-top:1em;
+}
+#btnPista{padding:.6em 1.2em;font-size:1em;font-weight:600;}
+#pistaBox{
+  max-width:700px;
+  padding:.8em 1.2em;
+  border-radius:8px;
+  background:rgba(255,255,255,.85);
+  font-size:.95rem;line-height:1.5;color:#222;text-align:left;
+  box-shadow:0 2px 6px rgba(0,0,0,.15);
 }
 
-#btnPista {
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 600;
-}
-
-#pistaBox {
-  max-width: 700px;
-  padding: 0.8em 1.2em;
-  border-radius: 8px;
-  background: rgba(255,255,255,0.85);
-  font-size: 0.95rem;
-  line-height: 1.5;
-  color: #222;
-  text-align: left;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-}
+/* =========================================================
+   MODAL Periodos
+   ========================================================= */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:2000;}
+.modal.hidden{display:none;}
+.modal-dialog{width:min(680px,92vw);background:#fff;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.25);}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:1em 1.1em;border-bottom:1px solid #eee;}
+.modal-close{background:#222;color:#fff;border:none;border-radius:8px;padding:.4em .6em;cursor:pointer;}
+.modal-close:hover{background:#444;}
+.modal-body{display:flex;gap:1em;padding:1em 1.1em 1.2em;text-align:left;align-items:flex-start;}
+.modal-color{width:20px;height:20px;border-radius:50%;margin-top:.25em;flex:0 0 auto;}
+.modal-texto{flex:1;}
 
 /* ================= RESPONSIVO ================= */
-@media (max-width: 700px) {
-  .ficha-contenido {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  .ficha-imagen {
-    justify-content: center;
-  }
-  .ficha-imagen img {
-    max-width: 85%;
-    max-height: none;
-  }
-  .ficha-texto {
-    text-align: center;
-    padding-top: 1em;
-  }
+@media (max-width:700px){
+  .ficha-contenido{flex-direction:column;align-items:center;text-align:center;}
+  .ficha-imagen{justify-content:center;}
+  .ficha-imagen img{max-width:85%;max-height:none;}
+  .ficha-texto{text-align:center;padding-top:1em;}
 
-  .leyenda {
-    text-align: center;
-  }
-  .leyenda-item {
-    justify-content: center;
-  }
+  #leyenda{text-align:center;align-items:center;}
+  #leyenda .leyenda-item{justify-content:center;padding-right:2.6em;}
 
-  #pistaBox {
-    text-align: center;
-  }
+  #pistaBox{text-align:center;}
 }
