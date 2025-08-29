@@ -37,33 +37,16 @@ header .header-link {
 }
 
 /* ================= PANTALLAS ================= */
-#bienvenida,
 #contenido,
 #menuModos,
 #cargando {
   padding: 2em 1em;
 }
 
-.anio {
-  font-size: 2.3em;
-  font-weight: 700;
-  margin-top: 0.2em;
-}
-
-.inicio-label {
-  font-size: 1.4em;
-  font-weight: 600;
-}
-
-.inicio-anio {
-  font-size: 2.5em;
-  font-weight: 700;
-}
-
 .cuarteto-numero {
   font-size: 2em;
   font-weight: 700;
-  margin-bottom: 1em;
+  margin-bottom: 0.2em;
 }
 
 #detalles {
@@ -172,7 +155,7 @@ button:hover {
 }
 
 /* =========================================================
-   CONTENEDOR COMÚN (leyenda o ficha ocupan el mismo hueco)
+   FICHA DE SOLUCIÓN (imagen + texto)
    ========================================================= */
 .ficha-detalle {
   margin: 1.5em auto;
@@ -180,8 +163,8 @@ button:hover {
   border-radius: 14px;
   display: flex;
   justify-content: center;
-  width: 100%;
   transition: opacity 0.3s ease;
+  width: 100%;
 }
 
 .ficha-contenido {
@@ -192,9 +175,6 @@ button:hover {
   align-items: center;
 }
 
-/* =========================================================
-   FICHA DE SOLUCIÓN (imagen + texto)
-   ========================================================= */
 .ficha-imagen {
   flex: 0 0 40%;
   display: flex;
@@ -203,7 +183,7 @@ button:hover {
 
 .ficha-imagen img {
   display: block;
-  max-height: 220px; /* tamaño controlado */
+  max-height: 220px;
   width: auto;
   border-radius: 8px;
   box-shadow: none;
@@ -240,17 +220,15 @@ button:hover {
 }
 
 /* =========================================================
-   LEYENDA (5 líneas apiladas, mismo ancho que la ficha)
+   LEYENDA
    ========================================================= */
 #leyenda {
-  display: flex;              /* importante: flex para controlar dirección */
-  flex-direction: column;     /* 5 líneas, una debajo de otra */
-  align-items: flex-start;    /* alineado a la izquierda */
-  justify-content: center;    /* centrado vertical en el hueco */
+  display: flex;
+  flex-direction: column;
   gap: 0.6em;
-  max-width: 700px;           /* igual que .ficha-contenido */
+  max-width: 700px;
   width: 100%;
-  min-height: 220px;          /* altura aproximada de la imagen */
+  margin: 1.5em auto;
   text-align: left;
 }
 
@@ -263,11 +241,34 @@ button:hover {
   font-weight: 600;
 }
 
+/* El puntito de color */
 .leyenda-item .punto {
   width: 14px;
   height: 14px;
   border-radius: 50%;
   display: inline-block;
+}
+
+/* ===== Apariencia de botones en modo Solitario ===== */
+.leyenda-btn {
+  background-color: #222;
+  color: #fff;
+  border-radius: 8px;
+  padding: 0.6em 1em;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  justify-content: flex-start;
+}
+.leyenda-btn:hover {
+  background-color: #444;
+}
+
+/* Feedback de acierto/fallo */
+.is-correct {
+  border: 2px solid #1a7f37;
+}
+.is-wrong {
+  border: 2px solid #b4232d;
 }
 
 /* ================= RESPONSIVO ================= */
@@ -290,7 +291,6 @@ button:hover {
   }
 
   #leyenda {
-    align-items: center;   /* centramos en móvil */
     text-align: center;
   }
   .leyenda-item {
