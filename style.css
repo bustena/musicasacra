@@ -167,7 +167,11 @@ button:hover{background:#444;}
   /* 2) Ficha: layout vertical y sin imagen */
   .ficha-contenido{flex-direction:column;align-items:center;text-align:center;}
   .ficha-imagen{display:none;}
-  .ficha-texto{text-align:center;padding-top:1em;}
+  .ficha-texto{
+    flex:1 1 auto;
+    text-align:center;
+    padding-top:.5em;
+  }
 
   /* 3) Leyenda centrada en móvil */
   #leyenda{text-align:center;align-items:center;}
@@ -182,63 +186,16 @@ button:hover{background:#444;}
 }
 
 /* === Ajustes globales complementarios (fuera del @media) === */
+.ficha-detalle{margin-bottom:1.25em;}          /* aire entre ficha y audio */
+#audio-container{margin:1em auto 3.5em;}       /* margen por defecto mayor */
 
-/* Más aire entre ficha y controles de audio */
-.ficha-detalle{margin-bottom:1.25em;}
-/* Un poco más de margen inferior por defecto */
-#audio-container{margin:1em auto 3.5em;}
-/* Evitar solapes/roturas con textos largos */
-#descripcion, #texto-extra{
+#descripcion, #texto-extra{                    /* robustecer texto largo */
   overflow-wrap:anywhere;
   word-break:break-word;
 }
-
-/* ===== 1) Cabecera de juego: apilar en móvil ===== */
-@media (max-width: 700px) {
-  .barra-superior {
-    flex-direction: column;      /* apilar */
-    gap: .25em;
-  }
-  .marcadores {
-    position: static;            /* quitar absolute */
-    transform: none;
-    align-self: center;          /* centrar */
-    font-size: .95em;
-  }
-}
-
-/* ===== 2) Móvil: ocultar imagen y centrar textos de la ficha ===== */
-@media (max-width: 700px) {
-  .ficha-imagen { display: none; }
-  .ficha-texto {
-    flex: 1 1 auto;
-    text-align: center;
-    padding-top: .5em;
-  }
-}
-
-/* ===== 3) Aire extra y evitar solapes con audio/barra fija ===== */
-/* más margen inferior cuando hay ficha para despegar de los controles */
-.ficha-detalle { margin-bottom: 1.25em; }
-
-/* los controles de audio ya tenían margen inferior; súbelo un poco */
-#audio-container { margin: 1em auto 3.5em; } /* antes 2.5em */
-
-/* en móvil, aún más aire por la barra fija y dedos */
-@media (max-width: 700px) {
-  #audio-container { margin: 1em auto 4.25em; }
-  body { padding-bottom: 100px; } /* antes 84px */
-}
-
-/* ===== 4) Robustecer el texto largo ===== */
-#descripcion, #texto-extra {
-  overflow-wrap: anywhere;  /* permite cortar palabras largas */
-  word-break: break-word;
-}
-
-#texto-extra {
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.6;
+#texto-extra{
+  max-width:700px;
+  margin-left:auto;
+  margin-right:auto;
+  line-height:1.6;
 }
