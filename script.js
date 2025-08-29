@@ -8,11 +8,11 @@ let pistaVisible = false;
 
 // Fallback de periodos con descripciones
 let PERIODOS = [
-  { hex: "#5ca8d6", label: "Edad Media y Renacimiento (hasta 1500)", desc: "Monodia / polifonía inicial, modos eclesiásticos, canto llano, ritmo libre o isorrítmico. Timbre vocal predominante." },
-  { hex: "#f9c623", label: "Renacimiento y Barroco temprano (hasta 1640)", desc: "Polifonía imitativa, equilibrio de voces; aparición del bajo continuo; contrastes iniciales entre grupos instrumentales." },
-  { hex: "#e06464", label: "Barroco tardío (hasta 1750)", desc: "Bajo continuo consolidado, secuencias, ritmos marcados, virtuosismo; concerto grosso/solista, fuga, ornamentación." },
-  { hex: "#26b98f", label: "Periodo clásico-romántico (hasta 1920)", desc: "Frases periódicas, forma sonata; luego expansión expresiva, cromatismo, orquesta ampliada, leitmotiv." },
-  { hex: "#c87ab0", label: "Siglos XX y XXI", desc: "Lenguajes diversos: impresionismo, atonalidad/serialismo, neoclasicismo, minimalismo, electrónica, nuevas texturas y timbres." },
+  { hex: "#5ca8d6", label: "Edad Media y Renacimiento (-1500)", desc: "Canto llano, polifonías primitivas, ars antiqua, ars nova y escuela flamenca." },
+  { hex: "#f9c623", label: "Renacimiento y Barroco temprano (1500-1640)", desc: "Edad de Oro de la polifonía. Desde Josquin hasta la escuela policoral de Venecia" },
+  { hex: "#e06464", label: "Barroco tardío (1640-1750)", desc: "La era del bajo continuo y de los primeros desarrollos de la música orquestal." },
+  { hex: "#26b98f", label: "Periodo clásico-romántico (1750-1920)", desc: "Desde Mozart hasta Lili Boulanger. Edad de Oro de la música orquestal. La música sacra como música de concierto." },
+  { hex: "#c87ab0", label: "Siglos XX y XXI (1920-)", desc: "Desde Francis Poulenc hasta nuestros días. Amplio rango estilístico, desde la inspiración popular a la vanguardia." },
 ];
 
 // Si en el futuro publicas CSV de periodos, pon aquí su URL y se cargará automáticamente.
