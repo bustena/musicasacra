@@ -95,13 +95,27 @@ button:hover{background:#444;}
 }
 #leyenda .leyenda-item:hover{background:#444;}
 
-.leyenda-item .punto{width:14px;height:14px;border-radius:50%;display:inline-block;}
-.info-btn{
-  position:absolute;right:.6em;top:50%;transform:translateY(-50%);
-  margin-right: 14px; /* el punto mide 14px */
-  background:#000;color:#fff;border:none;border-radius:8px;padding:.2em .5em;font-weight:700;cursor:pointer;
+.leyenda-item .punto {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 14px; /* separa el punto de la etiqueta */
 }
-.info-btn:hover{background:#111;}
+
+.info-btn {
+  position: absolute;
+  right: .6em;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: .2em .5em;
+  font-weight: 700;
+  cursor: pointer;
+}
 
 /* Modo Mesa: que NO parezcan botones (lista simple) */
 # leyenda.modo-mesa{} /* evita errores si alguien copia-línea */
