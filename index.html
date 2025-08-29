@@ -33,59 +33,60 @@
 <!-- Contenido principal -->
 <div id="contenido" class="hidden">
   <!-- Cabecera de juego: título + marcadores -->
-  <div style="max-width:700px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:.75em;">
+  <div class="barra-superior">
     <div id="titulo" class="cuarteto-numero">Obra</div>
-    <div id="marcadores" aria-live="polite" style="font-weight:600;">
+    <div id="marcadores" aria-live="polite" class="marcadores">
       <span>Puntos: <span id="puntos">0</span></span> •
       <span>Racha: <span id="racha">0</span></span> (<span id="rachaMax">0</span>)
     </div>
   </div>
 
   <!-- Feedback de acierto/fallo -->
-  <div id="feedback" style="height:1.6em;margin:.2em auto 0;max-width:700px;font-weight:700;"></div>
+  <div id="feedback" class="feedback"></div>
 
   <!-- Contenedor común: leyenda (botones) y ficha de solución -->
   <div class="ficha-detalle">
-    <!-- LEYENDA: en solitario son botones; en mesa actuará como guía (JS lo manejará) -->
+    <!-- LEYENDA -->
     <div id="leyenda" class="ficha-contenido" role="group" aria-label="Elige periodo">
-      <!-- Cada línea es un botón accesible con color y texto -->
-      <button class="leyenda-item leyenda-btn"
-              data-hex="#5ca8d6"
-              aria-label="Edad Media y Renacimiento (hasta 1500)">
+      <!-- Cada línea es un botón con un ⓘ a la derecha -->
+      <button class="leyenda-item" data-hex="#5ca8d6">
         <span class="punto" style="background:#5ca8d6"></span>
         <span class="leyenda-txt">Edad Media y Renacimiento (hasta 1500)</span>
+        <button type="button" class="info-btn" aria-label="Información del periodo">ⓘ</button>
       </button>
 
-      <button class="leyenda-item leyenda-btn"
-              data-hex="#f9c623"
-              aria-label="Renacimiento y Barroco temprano (hasta 1640)">
+      <button class="leyenda-item" data-hex="#f9c623">
         <span class="punto" style="background:#f9c623"></span>
         <span class="leyenda-txt">Renacimiento y Barroco temprano (hasta 1640)</span>
+        <button type="button" class="info-btn" aria-label="Información del periodo">ⓘ</button>
       </button>
 
-      <button class="leyenda-item leyenda-btn"
-              data-hex="#e06464"
-              aria-label="Barroco tardío (hasta 1750)">
+      <button class="leyenda-item" data-hex="#e06464">
         <span class="punto" style="background:#e06464"></span>
         <span class="leyenda-txt">Barroco tardío (hasta 1750)</span>
+        <button type="button" class="info-btn" aria-label="Información del periodo">ⓘ</button>
       </button>
 
-      <button class="leyenda-item leyenda-btn"
-              data-hex="#26b98f"
-              aria-label="Periodo clásico-romántico (hasta 1920)">
+      <button class="leyenda-item" data-hex="#26b98f">
         <span class="punto" style="background:#26b98f"></span>
         <span class="leyenda-txt">Periodo clásico-romántico (hasta 1920)</span>
+        <button type="button" class="info-btn" aria-label="Información del periodo">ⓘ</button>
       </button>
 
-      <button class="leyenda-item leyenda-btn"
-              data-hex="#c87ab0"
-              aria-label="Siglos XX y XXI">
+      <button class="leyenda-item" data-hex="#c87ab0">
         <span class="punto" style="background:#c87ab0"></span>
         <span class="leyenda-txt">Siglos XX y XXI</span>
+        <button type="button" class="info-btn" aria-label="Información del periodo">ⓘ</button>
       </button>
+
+      <!-- Botón Pista (solo en Solitario; JS lo muestra/oculta) -->
+      <div id="pista-wrap" class="pista-wrap hidden">
+        <button id="btnPista" type="button" class="btn-pista">💡 Pista</button>
+        <div id="pistaBox" class="pista-box hidden"></div>
+      </div>
     </div>
 
-    <!-- FICHA: oculta hasta responder -->
+    <!-- FICHA (oculta hasta responder / o tras pulsar Solución en Mesa) -->
     <div id="detalles" class="invisible ficha-contenido">
       <div class="ficha-imagen">
         <img id="imagen" class="hidden" alt=""/>
@@ -101,7 +102,7 @@
   <!-- Controles de audio -->
   <div id="audio-container"></div>
 
-  <!-- Botón solución (solo para modo Mesa; en Solitario no se mostrará) -->
+  <!-- Botón solución (solo Mesa) -->
   <div id="botonSolucion">
     <button onclick="mostrarSolucion()" id="btnSolucion" title="Atajo: Enter">🎯 Solución</button>
   </div>
@@ -121,6 +122,20 @@
 
 <!-- Botón fijo inferior -->
 <div id="boton-reglas-global" onclick="abrirReglas()">📖 Reglas del juego</div>
+
+<!-- Modal de información de periodo -->
+<div id="modalPeriodos" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3 id="modalTitulo">Periodo</h3>
+      <button type="button" class="modal-close" id="modalClose" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-color"></div>
+      <div class="modal-texto"></div>
+    </div>
+  </div>
+</div>
 
 <script src="script.js"></script>
 </body>
