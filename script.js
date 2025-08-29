@@ -6,68 +6,70 @@ let modoJuego = "";            // 'solitario' | 'mesa'
 let puntos = 0, racha = 0, rachaMax = 0;
 let pistaVisible = false;
 
-// Fallback de periodos con descripciones
+// PERIODOS (tus textos)
 let PERIODOS = [
   { hex: "#5ca8d6", label: "Edad Media y Renacimiento (-1500)", desc: "Canto llano, polifonías primitivas, ars antiqua, ars nova y escuela flamenca." },
   { hex: "#f9c623", label: "Renacimiento y Barroco temprano (1500-1640)", desc: "Edad de Oro de la polifonía. Desde Josquin hasta la escuela policoral de Venecia" },
   { hex: "#e06464", label: "Barroco tardío (1640-1750)", desc: "La era del bajo continuo y de los primeros desarrollos de la música orquestal." },
   { hex: "#26b98f", label: "Periodo clásico-romántico (1750-1920)", desc: "Desde Mozart hasta Lili Boulanger. Edad de Oro de la música orquestal. La música sacra como música de concierto." },
-  { hex: "#c87ab0", label: "Siglos XX y XXI (1920-)", desc: "Desde Francis Poulenc hasta nuestros días. Amplio rango estilístico, desde la inspiración popular a la vanguardia." },
+  { hex: "#c87ab0", label: "Siglos XX y XXI (1920-)", desc: "Desde Francis Poulenc hasta nuestros días. Amplio rango estilístico, desde la inspiración popular a la vanguardia." }
 ];
 
-// Si en el futuro publicas CSV de periodos, pon aquí su URL y se cargará automáticamente.
+// (Opcional) CSV de periodos si lo usas en el futuro:
 // const PERIODOS_CSV_URL = "https://.../pub?gid=XXX&single=true&output=csv";
 
 window.onload = async () => {
   try {
-    // 1) Descargar CSV
     const urlCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQrioQKwGSHMHsy9dQr37uk1xCFZC8vhIKDXepOtNEM_efmPwpe5ROmksO0fu_ZmHlxPUskuXu4rmCw/pub?gid=0&single=true&output=csv";
     const resp = await fetch(urlCSV);
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const csv = await resp.text();
 
-    // 2) Parsear CSV con Papa
     const parsed = Papa.parse(csv, { header: true, skipEmptyLines: true, delimiter: ",", quoteChar: '"' });
-    if (!parsed || !parsed.data || !Array.isArray(parsed.data)) {
-      throw new Error("CSV vacío o mal formateado");
-    }
+    if (!parsed || !parsed.data || !Array.isArray(parsed.data)) throw new Error("CSV vacío o mal formateado");
 
-    // 3) Mapear datos
     datos = parsed.data.map(f => ({
-      año:   f["año"],
+      año: f["año"],
       autor: f["autor"],
-      obra:  f["obra"],
+      obra: f["obra"],
       audio: f["audio"],
       color: (f["color"] || "").toLowerCase().trim(),
-      imagen:f["imagen"],
+      imagen: f["imagen"],
       texto: f["texto"]
-    })).filter(x => x && (x.audio || x.imagen || x.autor || x.obra)); // descarta filas vacías
+    })).filter(x => x && (x.audio || x.imagen || x.autor || x.obra));
 
-    // si vienen 0 filas, avisa
     if (datos.length === 0) throw new Error("No se han encontrado filas de datos tras el parseo");
 
-    // aleatorizar
     datos.sort(() => Math.random() - 0.5);
     solucionMostrada = new Array(datos.length).fill(false);
 
-    console.log(`CSV cargado: ${datos.length} filas válidas`);
+    // (Opcional) Cargar PERIODOS desde CSV si habilitas PERIODOS_CSV_URL
+    /*
+    if (typeof PERIODOS_CSV_URL === "string") {
+      try {
+        const csvP = await fetch(PERIODOS_CSV_URL).then(r=>r.text());
+        const p = Papa.parse(csvP, { header:true, skipEmptyLines:true });
+        PERIODOS = p.data
+          .map(x => ({ hex: (x.color||"").trim(), label:x.label, desc:x.descripcion, orden:+(x.orden||0) }))
+          .filter(x => x.hex && x.label)
+          .sort((a,b) => (a.orden||0) - (b.orden||0));
+      } catch (_) {}
+    }
+    */
+
+    inicializarLeyendaDesdePeriodos();
   } catch (err) {
     console.error("Error cargando CSV:", err);
-    // Muestra un mensaje en la propia página
     const carg = document.getElementById("cargando");
     if (carg) {
       carg.innerHTML = `<p><strong>Error cargando datos</strong></p>
                         <p style="max-width:700px;margin:0 auto;">${(err && err.message) ? err.message : "Revisa la consola para más detalles."}</p>`;
     }
-    // No salgas: dejamos la UI accesible aunque sea para probar
   } finally {
-    // 4) Siempre: quita “Cargando…” y muestra el menú para no bloquear la interfaz
     const carg = document.getElementById("cargando");
     if (carg) carg.classList.add("hidden");
     const menu = document.getElementById("menuModos");
     if (menu) menu.classList.remove("hidden");
-
-    // Atajos de teclado
     window.focus();
     document.addEventListener("keydown", onKey);
   }
@@ -112,12 +114,14 @@ function seleccionarModo(modo) {
     document.getElementById("marcadores").style.display = "block";
     document.getElementById("botonSolucion").classList.add("hidden");
     document.getElementById("titulo").style.textAlign = "left";
-    document.getElementById("pista-wrap").classList.remove("hidden");
+    const pw = document.getElementById("pista-wrap");
+    if (pw) { pw.classList.remove("hidden"); pw.style.display = "block"; }
   } else {
     document.getElementById("marcadores").style.display = "none";
     document.getElementById("botonSolucion").classList.remove("hidden");
     document.getElementById("titulo").style.textAlign = "center";
-    document.getElementById("pista-wrap").classList.add("hidden");
+    const pw = document.getElementById("pista-wrap");
+    if (pw) { pw.classList.add("hidden"); pw.style.display = "none"; }
   }
 
   mostrar();
@@ -134,7 +138,6 @@ function inicializarLeyendaDesdePeriodos() {
     if (punto) punto.style.background = p.hex;
     if (txt)   txt.textContent = p.label;
 
-    // info button
     const info = btn.querySelector(".info-btn");
     if (info) {
       info.onclick = (ev) => {
@@ -166,14 +169,24 @@ function cerrarModalPeriodo() {
   document.getElementById("modalPeriodos").classList.add("hidden");
 }
 
-function togglePista() {
-  const box = document.getElementById("pistaBox");
-  if (!datos.length) return;
+function togglePista(e) {
+  if (e) e.stopPropagation();
+
+  const wrap = document.getElementById("pista-wrap");
+  const box  = document.getElementById("pistaBox");
+  if (!datos.length || !wrap || !box) return;
+
+  const txt = (datos[indice].texto || "").trim();
+
   if (box.classList.contains("hidden")) {
-    box.textContent = datos[indice].texto || "—";
+    box.textContent = txt || "—";
+    wrap.classList.remove("hidden");
+    wrap.style.display = "block";
     box.classList.remove("hidden");
+    box.style.display = "block";
   } else {
     box.classList.add("hidden");
+    box.style.display = "none";
     box.textContent = "";
   }
 }
@@ -195,8 +208,13 @@ function mostrar() {
   botones.style.display = "none";
   document.body.style.backgroundColor = "#dcdcdc";
   pistaVisible = false;
+
   const pistaBox = document.getElementById("pistaBox");
-  if (pistaBox) { pistaBox.classList.add("hidden"); pistaBox.textContent = ""; }
+  if (pistaBox) {
+    pistaBox.classList.add("hidden");
+    pistaBox.style.display = "none";
+    pistaBox.textContent = "";
+  }
 
   // Mostrar leyenda; ocultar ficha
   leyenda.style.display = "flex";
@@ -318,12 +336,14 @@ function prepararLeyendaParaModo() {
     leyendaBox.classList.remove("modo-mesa");
     botones.forEach((b) => { b.onclick = onElegirColorSolitario; });
     document.getElementById("marcadores").style.display = "block";
-    document.getElementById("pista-wrap").classList.remove("hidden");
+    const pw = document.getElementById("pista-wrap");
+    if (pw) { pw.classList.remove("hidden"); pw.style.display = "block"; }
   } else {
     leyendaBox.classList.add("modo-mesa");
     botones.forEach((b) => { b.onclick = null; });
     document.getElementById("marcadores").style.display = "none";
-    document.getElementById("pista-wrap").classList.add("hidden");
+    const pw = document.getElementById("pista-wrap");
+    if (pw) { pw.classList.add("hidden"); pw.style.display = "none"; }
   }
 }
 
