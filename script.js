@@ -230,12 +230,28 @@ function togglePista(e) {
   if (!datos.length || !wrap || !box) return;
 
   const txt = (datos[indice].texto || "").trim();
+
   if (box.classList.contains("hidden")) {
+    // Mostrar pista
     box.textContent = txt || "—";
-    wrap.classList.remove("hidden"); wrap.style.display = "block";
-    box.classList.remove("hidden");  box.style.display = "block";
+    wrap.classList.remove("hidden");
+    // Fuerza layout centrado aunque algún estilo lo pise
+    wrap.style.display = "flex";
+    wrap.style.alignItems = "center";
+    wrap.style.justifyContent = "center";
+
+    box.classList.remove("hidden");
+    box.style.display = ""; // deja que el CSS gobierne
   } else {
-    box.classList.add("hidden"); box.style.display = "none"; box.textContent = "";
+    // Ocultar pista
+    box.classList.add("hidden");
+    box.style.display = "none";
+    box.textContent = "";
+    // Mantén el contenedor visible y centrado para el botón
+    wrap.classList.remove("hidden");
+    wrap.style.display = "flex";
+    wrap.style.alignItems = "center";
+    wrap.style.justifyContent = "center";
   }
 }
 
