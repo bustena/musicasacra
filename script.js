@@ -4,31 +4,30 @@ let solucionMostrada = [];
 let audioGlobal = new Audio();
 let modoJuego = "";            // 'solitario' | 'mesa'
 let puntos = 0, racha = 0, rachaMax = 0;
-let pistaVisible = false;
 
-// PERIODOS (tus textos)
+// ------- URLs CSV -------
+const OBRAS_CSV_URL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQrioQKwGSHMHsy9dQr37uk1xCFZC8vhIKDXepOtNEM_efmPwpe5ROmksO0fu_ZmHlxPUskuXu4rmCw/pub?gid=0&single=true&output=csv";
+
+const PERIODOS_CSV_URL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQrioQKwGSHMHsy9dQr37uk1xCFZC8vhIKDXepOtNEM_efmPwpe5ROmksO0fu_ZmHlxPUskuXu4rmCw/pub?gid=7579083&single=true&output=csv";
+
+// ------- Fallback PERIODOS (si el CSV de P_sacra falla) -------
 let PERIODOS = [
-  { hex: "#5ca8d6", label: "Edad Media y Renacimiento (-1500)", desc: "Canto llano, polifonías primitivas, ars antiqua, ars nova y escuela flamenca." },
-  { hex: "#f9c623", label: "Renacimiento y Barroco temprano (1500-1640)", desc: "Edad de Oro de la polifonía. Desde Josquin hasta la escuela policoral de Venecia" },
-  { hex: "#e06464", label: "Barroco tardío (1640-1750)", desc: "La era del bajo continuo y de los primeros desarrollos de la música orquestal." },
-  { hex: "#26b98f", label: "Periodo clásico-romántico (1750-1920)", desc: "Desde Mozart hasta Lili Boulanger. Edad de Oro de la música orquestal. La música sacra como música de concierto." },
-  { hex: "#c87ab0", label: "Siglos XX y XXI (1920-)", desc: "Desde Francis Poulenc hasta nuestros días. Amplio rango estilístico, desde la inspiración popular a la vanguardia." }
+  { hex: "#5ca8d6", label: "Edad Media y Renacimiento (-1500)", desc: "Canto llano, polifonías primitivas, ars antiqua, ars nova y escuela flamenca.", orden: 1 },
+  { hex: "#f9c623", label: "Renacimiento y Barroco temprano (1500-1640)", desc: "Edad de Oro de la polifonía. Desde Josquin hasta la escuela policoral de Venecia", orden: 2 },
+  { hex: "#e06464", label: "Barroco tardío (1640-1750)", desc: "La era del bajo continuo y de los primeros desarrollos de la música orquestal.", orden: 3 },
+  { hex: "#26b98f", label: "Periodo clásico-romántico (1750-1920)", desc: "Desde Mozart hasta Lili Boulanger. Edad de Oro de la música orquestal. La música sacra como música de concierto.", orden: 4 },
+  { hex: "#c87ab0", label: "Siglos XX y XXI (1920-)", desc: "Desde Francis Poulenc hasta nuestros días. Amplio rango estilístico, desde la inspiración popular a la vanguardia.", orden: 5 }
 ];
-
-// (Opcional) CSV de periodos si lo usas en el futuro:
-// const PERIODOS_CSV_URL = "https://.../pub?gid=XXX&single=true&output=csv";
 
 window.onload = async () => {
   try {
-    const urlCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQrioQKwGSHMHsy9dQr37uk1xCFZC8vhIKDXepOtNEM_efmPwpe5ROmksO0fu_ZmHlxPUskuXu4rmCw/pub?gid=0&single=true&output=csv";
-    const resp = await fetch(urlCSV);
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-    const csv = await resp.text();
+    // 1) OBRAS
+    const csvObras = await fetchText(OBRAS_CSV_URL);
+    const pObras = Papa.parse(csvObras, { header: true, skipEmptyLines: true, delimiter: ",", quoteChar: '"' });
 
-    const parsed = Papa.parse(csv, { header: true, skipEmptyLines: true, delimiter: ",", quoteChar: '"' });
-    if (!parsed || !parsed.data || !Array.isArray(parsed.data)) throw new Error("CSV vacío o mal formateado");
-
-    datos = parsed.data.map(f => ({
+    datos = pObras.data.map(f => ({
       año: f["año"],
       autor: f["autor"],
       obra: f["obra"],
@@ -38,42 +37,55 @@ window.onload = async () => {
       texto: f["texto"]
     })).filter(x => x && (x.audio || x.imagen || x.autor || x.obra));
 
-    if (datos.length === 0) throw new Error("No se han encontrado filas de datos tras el parseo");
+    if (datos.length === 0) throw new Error("No se han encontrado filas de datos tras el parseo de obras.");
 
     datos.sort(() => Math.random() - 0.5);
     solucionMostrada = new Array(datos.length).fill(false);
 
-    // (Opcional) Cargar PERIODOS desde CSV si habilitas PERIODOS_CSV_URL
-    /*
-    if (typeof PERIODOS_CSV_URL === "string") {
-      try {
-        const csvP = await fetch(PERIODOS_CSV_URL).then(r=>r.text());
-        const p = Papa.parse(csvP, { header:true, skipEmptyLines:true });
-        PERIODOS = p.data
-          .map(x => ({ hex: (x.color||"").trim(), label:x.label, desc:x.descripcion, orden:+(x.orden||0) }))
-          .filter(x => x.hex && x.label)
-          .sort((a,b) => (a.orden||0) - (b.orden||0));
-      } catch (_) {}
+    // 2) PERIODOS (P_sacra). Si falla, mantenemos PERIODOS fallback.
+    try {
+      const csvPer = await fetchText(PERIODOS_CSV_URL);
+      const pPer = Papa.parse(csvPer, { header: true, skipEmptyLines: true, delimiter: ",", quoteChar: '"' });
+      const arr = pPer.data
+        .map(r => ({
+          hex: (r["color"] || "").trim(),
+          label: (r["etiqueta"] || "").trim(),
+          desc: (r["descripcion"] || "").trim(),
+          orden: Number(r["orden"] || 0)
+        }))
+        .filter(x => x.hex && x.label);
+
+      if (arr.length >= 5) {
+        PERIODOS = arr
+          .map(x => ({ ...x, hex: x.hex.toLowerCase() }))
+          .sort((a, b) => (a.orden || 0) - (b.orden || 0));
+      }
+    } catch (e) {
+      console.warn("No se pudo cargar P_sacra; usando PERIODOS por defecto:", e);
     }
-    */
 
     inicializarLeyendaDesdePeriodos();
   } catch (err) {
-    console.error("Error cargando CSV:", err);
+    console.error("Error inicializando:", err);
     const carg = document.getElementById("cargando");
     if (carg) {
       carg.innerHTML = `<p><strong>Error cargando datos</strong></p>
-                        <p style="max-width:700px;margin:0 auto;">${(err && err.message) ? err.message : "Revisa la consola para más detalles."}</p>`;
+                        <p style="max-width:700px;margin:0 auto;">${err?.message || "Revisa la consola para más detalles."}</p>`;
     }
   } finally {
-    const carg = document.getElementById("cargando");
-    if (carg) carg.classList.add("hidden");
-    const menu = document.getElementById("menuModos");
-    if (menu) menu.classList.remove("hidden");
+    document.getElementById("cargando")?.classList.add("hidden");
+    document.getElementById("menuModos")?.classList.remove("hidden");
     window.focus();
     document.addEventListener("keydown", onKey);
   }
 };
+
+// Utilidad fetch con control de estado/errores
+async function fetchText(url) {
+  const resp = await fetch(url);
+  if (!resp.ok) throw new Error(`HTTP ${resp.status} en ${url}`);
+  return resp.text();
+}
 
 function onKey(e) {
   if (document.activeElement && ["INPUT","TEXTAREA","BUTTON"].includes(document.activeElement.tagName)) return;
@@ -114,14 +126,12 @@ function seleccionarModo(modo) {
     document.getElementById("marcadores").style.display = "block";
     document.getElementById("botonSolucion").classList.add("hidden");
     document.getElementById("titulo").style.textAlign = "left";
-    const pw = document.getElementById("pista-wrap");
-    if (pw) { pw.classList.remove("hidden"); pw.style.display = "block"; }
+    const pw = document.getElementById("pista-wrap"); if (pw) { pw.classList.remove("hidden"); pw.style.display = "block"; }
   } else {
     document.getElementById("marcadores").style.display = "none";
     document.getElementById("botonSolucion").classList.remove("hidden");
     document.getElementById("titulo").style.textAlign = "center";
-    const pw = document.getElementById("pista-wrap");
-    if (pw) { pw.classList.add("hidden"); pw.style.display = "none"; }
+    const pw = document.getElementById("pista-wrap"); if (pw) { pw.classList.add("hidden"); pw.style.display = "none"; }
   }
 
   mostrar();
@@ -129,14 +139,16 @@ function seleccionarModo(modo) {
 
 function inicializarLeyendaDesdePeriodos() {
   const filas = getLeyendaBotones();
-  filas.forEach((btn, i) => {
+  // Si hay menos de 5 items en DOM o más, recorrer el mínimo común
+  const n = Math.min(filas.length, PERIODOS.length);
+  for (let i = 0; i < n; i++) {
+    const btn = filas[i];
     const p = PERIODOS[i];
-    if (!p) return;
-    btn.dataset.hex = p.hex;
+    btn.dataset.hex = (p.hex || "").toLowerCase().trim();
     const punto = btn.querySelector(".punto");
-    const txt   = btn.querySelector(".leyenda-txt");
+    const txt = btn.querySelector(".leyenda-txt");
     if (punto) punto.style.background = p.hex;
-    if (txt)   txt.textContent = p.label;
+    if (txt) txt.textContent = p.label;
 
     const info = btn.querySelector(".info-btn");
     if (info) {
@@ -144,8 +156,9 @@ function inicializarLeyendaDesdePeriodos() {
         ev.stopPropagation(); // no disparar respuesta
         abrirModalPeriodo(p);
       };
+      info.setAttribute("title", "Información del periodo");
     }
-  });
+  }
 
   // modal cerrar
   document.getElementById("modalClose").onclick = cerrarModalPeriodo;
@@ -171,23 +184,17 @@ function cerrarModalPeriodo() {
 
 function togglePista(e) {
   if (e) e.stopPropagation();
-
   const wrap = document.getElementById("pista-wrap");
   const box  = document.getElementById("pistaBox");
   if (!datos.length || !wrap || !box) return;
 
   const txt = (datos[indice].texto || "").trim();
-
   if (box.classList.contains("hidden")) {
     box.textContent = txt || "—";
-    wrap.classList.remove("hidden");
-    wrap.style.display = "block";
-    box.classList.remove("hidden");
-    box.style.display = "block";
+    wrap.classList.remove("hidden"); wrap.style.display = "block";
+    box.classList.remove("hidden");  box.style.display = "block";
   } else {
-    box.classList.add("hidden");
-    box.style.display = "none";
-    box.textContent = "";
+    box.classList.add("hidden"); box.style.display = "none"; box.textContent = "";
   }
 }
 
@@ -207,14 +214,9 @@ function mostrar() {
   feedback.textContent = "";
   botones.style.display = "none";
   document.body.style.backgroundColor = "#dcdcdc";
-  pistaVisible = false;
 
   const pistaBox = document.getElementById("pistaBox");
-  if (pistaBox) {
-    pistaBox.classList.add("hidden");
-    pistaBox.style.display = "none";
-    pistaBox.textContent = "";
-  }
+  if (pistaBox) { pistaBox.classList.add("hidden"); pistaBox.style.display = "none"; pistaBox.textContent = ""; }
 
   // Mostrar leyenda; ocultar ficha
   leyenda.style.display = "flex";
@@ -234,7 +236,7 @@ function mostrar() {
   // Audio
   prepararAudio(item.audio);
 
-  // Si ya estaba mostrada la solución (volver atrás)
+  // Si ya había solución mostrada (volver atrás)
   if (solucionMostrada[indice]) {
     rellenarFicha(item);
     if (modoJuego === "solitario") leyenda.style.display = "none";
@@ -245,7 +247,7 @@ function mostrar() {
   }
 }
 
-function mostrarSolucion() { // usado en MESA
+function mostrarSolucion() { // MESA
   if (!datos.length) return;
   const item = datos[indice];
   solucionMostrada[indice] = true;
@@ -336,14 +338,12 @@ function prepararLeyendaParaModo() {
     leyendaBox.classList.remove("modo-mesa");
     botones.forEach((b) => { b.onclick = onElegirColorSolitario; });
     document.getElementById("marcadores").style.display = "block";
-    const pw = document.getElementById("pista-wrap");
-    if (pw) { pw.classList.remove("hidden"); pw.style.display = "block"; }
+    const pw = document.getElementById("pista-wrap"); if (pw) { pw.classList.remove("hidden"); pw.style.display = "block"; }
   } else {
     leyendaBox.classList.add("modo-mesa");
     botones.forEach((b) => { b.onclick = null; });
     document.getElementById("marcadores").style.display = "none";
-    const pw = document.getElementById("pista-wrap");
-    if (pw) { pw.classList.add("hidden"); pw.style.display = "none"; }
+    const pw = document.getElementById("pista-wrap"); if (pw) { pw.classList.add("hidden"); pw.style.display = "none"; }
   }
 }
 
