@@ -140,8 +140,12 @@ button:hover{background:#444;}
 /* Contenedor del botón Pista */
 #pista-wrap {
   display: flex;
-  justify-content: center; /* centra horizontal */
-  margin: 1em 0;
+  flex-direction: column;   /* botón arriba, caja debajo */
+  align-items: center;      /* centra horizontalmente */
+  justify-content: center;  /* asegura centrado */
+  gap: 0.8em;
+  margin: 1em auto;
+  width: 100%;
 }
 
 /* Botón de pista */
@@ -156,6 +160,10 @@ button:hover{background:#444;}
   box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
   cursor: pointer;
   transition: background-color 0.2s ease;
+
+  /* añadido para centrar */
+  margin: 0 auto;
+  display: inline-block;
 }
 
 #btnPista:hover {
