@@ -238,23 +238,17 @@ button:hover {
 }
 
 .leyenda {
-  max-width: 700px;
-  width: 100%;
-  min-height: 220px; /* igual que altura de imagen aprox */
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: column;  /* fuerza columna */
+  align-items: flex-start; /* textos alineados a la izquierda */
   gap: 0.6em;
-  text-align: left;
 }
 
 .leyenda-item {
-  display: flex;
+  display: flex;           /* cada ítem en fila: círculo + texto */
+  flex-direction: row;
   align-items: center;
-  gap: 0.6em;
-  font-size: 1.05rem;
-  line-height: 1.4;
-  font-weight: 600;
+  width: 100%;
 }
 
 .leyenda-item .punto {
