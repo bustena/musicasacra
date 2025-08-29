@@ -19,39 +19,58 @@ let PERIODOS = [
 // const PERIODOS_CSV_URL = "https://.../pub?gid=XXX&single=true&output=csv";
 
 window.onload = async () => {
-  // Carga obras
-  const csvObras = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vQrioQKwGSHMHsy9dQr37uk1xCFZC8vhIKDXepOtNEM_efmPwpe5ROmksO0fu_ZmHlxPUskuXu4rmCw/pub?gid=0&single=true&output=csv").then(r=>r.text());
-  const parsed = Papa.parse(csvObras, { header: true, skipEmptyLines: true, delimiter: ",", quoteChar: '"' });
-  datos = parsed.data.map(f => ({
-    año: f["año"], autor: f["autor"], obra: f["obra"],
-    audio: f["audio"], color: (f["color"] || "").toLowerCase().trim(),
-    imagen: f["imagen"], texto: f["texto"]
-  })).sort(() => Math.random() - 0.5);
-  solucionMostrada = new Array(datos.length).fill(false);
+  try {
+    // 1) Descargar CSV
+    const urlCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQrioQKwGSHMHsy9dQr37uk1xCFZC8vhIKDXepOtNEM_efmPwpe5ROmksO0fu_ZmHlxPUskuXu4rmCw/pub?gid=0&single=true&output=csv";
+    const resp = await fetch(urlCSV);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const csv = await resp.text();
 
-  // (Opcional) Carga periodos desde CSV si activas PERIODOS_CSV_URL
-  /*
-  if (typeof PERIODOS_CSV_URL === "string") {
-    try {
-      const csvP = await fetch(PERIODOS_CSV_URL).then(r=>r.text());
-      const p = Papa.parse(csvP, { header:true, skipEmptyLines:true });
-      PERIODOS = p.data
-        .map(x => ({ hex: (x.color||"").trim(), label:x.label, desc:x.descripcion, orden:+(x.orden||0) }))
-        .filter(x => x.hex && x.label)
-        .sort((a,b) => (a.orden||0) - (b.orden||0));
-    } catch(_) { /* fallback a PERIODOS por defecto */ }
+    // 2) Parsear CSV con Papa
+    const parsed = Papa.parse(csv, { header: true, skipEmptyLines: true, delimiter: ",", quoteChar: '"' });
+    if (!parsed || !parsed.data || !Array.isArray(parsed.data)) {
+      throw new Error("CSV vacío o mal formateado");
+    }
+
+    // 3) Mapear datos
+    datos = parsed.data.map(f => ({
+      año:   f["año"],
+      autor: f["autor"],
+      obra:  f["obra"],
+      audio: f["audio"],
+      color: (f["color"] || "").toLowerCase().trim(),
+      imagen:f["imagen"],
+      texto: f["texto"]
+    })).filter(x => x && (x.audio || x.imagen || x.autor || x.obra)); // descarta filas vacías
+
+    // si vienen 0 filas, avisa
+    if (datos.length === 0) throw new Error("No se han encontrado filas de datos tras el parseo");
+
+    // aleatorizar
+    datos.sort(() => Math.random() - 0.5);
+    solucionMostrada = new Array(datos.length).fill(false);
+
+    console.log(`CSV cargado: ${datos.length} filas válidas`);
+  } catch (err) {
+    console.error("Error cargando CSV:", err);
+    // Muestra un mensaje en la propia página
+    const carg = document.getElementById("cargando");
+    if (carg) {
+      carg.innerHTML = `<p><strong>Error cargando datos</strong></p>
+                        <p style="max-width:700px;margin:0 auto;">${(err && err.message) ? err.message : "Revisa la consola para más detalles."}</p>`;
+    }
+    // No salgas: dejamos la UI accesible aunque sea para probar
+  } finally {
+    // 4) Siempre: quita “Cargando…” y muestra el menú para no bloquear la interfaz
+    const carg = document.getElementById("cargando");
+    if (carg) carg.classList.add("hidden");
+    const menu = document.getElementById("menuModos");
+    if (menu) menu.classList.remove("hidden");
+
+    // Atajos de teclado
+    window.focus();
+    document.addEventListener("keydown", onKey);
   }
-  */
-
-  // Pintar textos/aria en los 5 botones de la leyenda
-  inicializarLeyendaDesdePeriodos();
-
-  document.getElementById("cargando").classList.add("hidden");
-  document.getElementById("menuModos").classList.remove("hidden");
-
-  // Atajos
-  window.focus();
-  document.addEventListener("keydown", onKey);
 };
 
 function onKey(e) {
