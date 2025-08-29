@@ -1,3 +1,4 @@
+/* =================== Estado =================== */
 let indice = 0;
 let datos = [];
 let solucionMostrada = [];
@@ -5,14 +6,14 @@ let audioGlobal = new Audio();
 let modoJuego = "";            // 'solitario' | 'mesa'
 let puntos = 0, racha = 0, rachaMax = 0;
 
-// ------- URLs CSV -------
+/* =================== CSV URLs =================== */
 const OBRAS_CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQrioQKwGSHMHsy9dQr37uk1xCFZC8vhIKDXepOtNEM_efmPwpe5ROmksO0fu_ZmHlxPUskuXu4rmCw/pub?gid=0&single=true&output=csv";
 
 const PERIODOS_CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQrioQKwGSHMHsy9dQr37uk1xCFZC8vhIKDXepOtNEM_efmPwpe5ROmksO0fu_ZmHlxPUskuXu4rmCw/pub?gid=7579083&single=true&output=csv";
 
-// ------- Fallback PERIODOS (si el CSV de P_sacra falla) -------
+/* ===== Fallback PERIODOS (si P_sacra fallase) ===== */
 let PERIODOS = [
   { hex: "#5ca8d6", label: "Edad Media y Renacimiento (-1500)", desc: "Canto llano, polifonías primitivas, ars antiqua, ars nova y escuela flamenca.", orden: 1 },
   { hex: "#f9c623", label: "Renacimiento y Barroco temprano (1500-1640)", desc: "Edad de Oro de la polifonía. Desde Josquin hasta la escuela policoral de Venecia", orden: 2 },
@@ -21,47 +22,46 @@ let PERIODOS = [
   { hex: "#c87ab0", label: "Siglos XX y XXI (1920-)", desc: "Desde Francis Poulenc hasta nuestros días. Amplio rango estilístico, desde la inspiración popular a la vanguardia.", orden: 5 }
 ];
 
+/* =================== Boot =================== */
 window.onload = async () => {
   try {
-    // 1) OBRAS
+    // OBRAS
     const csvObras = await fetchText(OBRAS_CSV_URL);
     const pObras = Papa.parse(csvObras, { header: true, skipEmptyLines: true, delimiter: ",", quoteChar: '"' });
 
     datos = pObras.data.map(f => ({
-      año: f["año"],
+      año:   f["año"],
       autor: f["autor"],
-      obra: f["obra"],
+      obra:  f["obra"],
       audio: f["audio"],
       color: (f["color"] || "").toLowerCase().trim(),
-      imagen: f["imagen"],
+      imagen:f["imagen"],
       texto: f["texto"]
     })).filter(x => x && (x.audio || x.imagen || x.autor || x.obra));
 
-    if (datos.length === 0) throw new Error("No se han encontrado filas de datos tras el parseo de obras.");
+    if (!datos.length) throw new Error("No hay filas válidas en 'obras'.");
 
     datos.sort(() => Math.random() - 0.5);
     solucionMostrada = new Array(datos.length).fill(false);
 
-    // 2) PERIODOS (P_sacra). Si falla, mantenemos PERIODOS fallback.
+    // PERIODOS (P_sacra)
     try {
       const csvPer = await fetchText(PERIODOS_CSV_URL);
       const pPer = Papa.parse(csvPer, { header: true, skipEmptyLines: true, delimiter: ",", quoteChar: '"' });
       const arr = pPer.data
         .map(r => ({
-          hex: (r["color"] || "").trim(),
+          hex:   (r["color"] || "").toLowerCase().trim(),
           label: (r["etiqueta"] || "").trim(),
-          desc: (r["descripcion"] || "").trim(),
+          desc:  (r["descripcion"] || "").trim(),
           orden: Number(r["orden"] || 0)
         }))
         .filter(x => x.hex && x.label);
 
       if (arr.length >= 5) {
-        PERIODOS = arr
-          .map(x => ({ ...x, hex: x.hex.toLowerCase() }))
-          .sort((a, b) => (a.orden || 0) - (b.orden || 0));
+        PERIODOS = arr.sort((a,b) => (a.orden||0) - (b.orden||0));
       }
     } catch (e) {
-      console.warn("No se pudo cargar P_sacra; usando PERIODOS por defecto:", e);
+      console.warn("No se pudo cargar 'P_sacra'; usando PERIODOS por defecto.", e);
     }
 
     inicializarLeyendaDesdePeriodos();
@@ -70,7 +70,7 @@ window.onload = async () => {
     const carg = document.getElementById("cargando");
     if (carg) {
       carg.innerHTML = `<p><strong>Error cargando datos</strong></p>
-                        <p style="max-width:700px;margin:0 auto;">${err?.message || "Revisa la consola para más detalles."}</p>`;
+        <p style="max-width:700px;margin:0 auto;">${err?.message || "Revisa la consola para más detalles."}</p>`;
     }
   } finally {
     document.getElementById("cargando")?.classList.add("hidden");
@@ -80,11 +80,11 @@ window.onload = async () => {
   }
 };
 
-// Utilidad fetch con control de estado/errores
+/* =================== Utils =================== */
 async function fetchText(url) {
-  const resp = await fetch(url);
-  if (!resp.ok) throw new Error(`HTTP ${resp.status} en ${url}`);
-  return resp.text();
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`HTTP ${r.status} en ${url}`);
+  return r.text();
 }
 
 function onKey(e) {
@@ -115,6 +115,7 @@ function abrirReglas() {
   window.open(URL_REGLAS, "_blank");
 }
 
+/* =================== Modos =================== */
 function seleccionarModo(modo) {
   modoJuego = modo;
   document.getElementById("menuModos").classList.add("hidden");
@@ -137,51 +138,82 @@ function seleccionarModo(modo) {
   mostrar();
 }
 
-function inicializarLeyendaDesdePeriodos() {
-  const filas = getLeyendaBotones();
-  // Si hay menos de 5 items en DOM o más, recorrer el mínimo común
-  const n = Math.min(filas.length, PERIODOS.length);
-  for (let i = 0; i < n; i++) {
-    const btn = filas[i];
-    const p = PERIODOS[i];
-    btn.dataset.hex = (p.hex || "").toLowerCase().trim();
-    const punto = btn.querySelector(".punto");
-    const txt = btn.querySelector(".leyenda-txt");
-    if (punto) punto.style.background = p.hex;
-    if (txt) txt.textContent = p.label;
+/* =================== Leyenda (filas + info) =================== */
+function getLeyendaRows() {
+  return Array.from(document.querySelectorAll("#leyenda .leyenda-row"));
+}
+function getLeyendaBotones() {
+  return Array.from(document.querySelectorAll("#leyenda .leyenda-item"));
+}
+function closeAllInfoPanels() {
+  getLeyendaRows().forEach((row) => {
+    const panel = row.querySelector(".info-panel");
+    const infoBtn = row.querySelector(".info-btn");
+    if (panel) panel.classList.add("hidden");
+    if (infoBtn) infoBtn.setAttribute("aria-expanded", "false");
+  });
+}
 
-    const info = btn.querySelector(".info-btn");
+function inicializarLeyendaDesdePeriodos() {
+  const rows = getLeyendaRows();
+  const n = Math.min(rows.length, PERIODOS.length);
+  for (let i = 0; i < n; i++) {
+    const row   = rows[i];
+    const p     = PERIODOS[i];
+    const btn   = row.querySelector(".leyenda-item");
+    const punto = row.querySelector(".punto");
+    const txt   = row.querySelector(".leyenda-txt");
+    const info  = row.querySelector(".info-btn");
+    const panel = row.querySelector(".info-panel");
+
+    if (!btn || !p) continue;
+    btn.dataset.hex = (p.hex || "").toLowerCase().trim();
+    if (punto) punto.style.background = p.hex;
+    if (txt)   txt.textContent = p.label;
+    if (panel) panel.textContent = ""; // cerrado al inicio
+
     if (info) {
       info.onclick = (ev) => {
-        ev.stopPropagation(); // no disparar respuesta
-        abrirModalPeriodo(p);
+        ev.stopPropagation(); // no responder
+        toggleInfoPanel(row, p.desc || "");
+      };
+      info.onkeydown = (ev) => {
+        if (ev.key === "Enter" || ev.key === " ") {
+          ev.preventDefault();
+          toggleInfoPanel(row, p.desc || "");
+        }
       };
       info.setAttribute("title", "Información del periodo");
+      info.setAttribute("aria-expanded", "false");
+      if (panel && panel.id) info.setAttribute("aria-controls", panel.id);
     }
   }
 
-  // modal cerrar
-  document.getElementById("modalClose").onclick = cerrarModalPeriodo;
-  document.getElementById("modalPeriodos").addEventListener("click", (e) => {
-    if (e.target.id === "modalPeriodos") cerrarModalPeriodo();
-  });
-
-  // pista
+  // Pista
   const btnPista = document.getElementById("btnPista");
   if (btnPista) btnPista.onclick = togglePista;
 }
 
-function abrirModalPeriodo(p) {
-  const m = document.getElementById("modalPeriodos");
-  m.querySelector("#modalTitulo").textContent = p.label;
-  m.querySelector(".modal-color").style.background = p.hex;
-  m.querySelector(".modal-texto").textContent = p.desc || "";
-  m.classList.remove("hidden");
-}
-function cerrarModalPeriodo() {
-  document.getElementById("modalPeriodos").classList.add("hidden");
+function toggleInfoPanel(rowEl, text) {
+  const panel = rowEl.querySelector(".info-panel");
+  const infoBtn = rowEl.querySelector(".info-btn");
+  if (!panel || !infoBtn) return;
+
+  const isOpen = !panel.classList.contains("hidden");
+  // cerrar todas
+  closeAllInfoPanels();
+
+  if (!isOpen) {
+    panel.textContent = text || "—";
+    panel.classList.remove("hidden");
+    infoBtn.setAttribute("aria-expanded", "true");
+  } else {
+    panel.classList.add("hidden");
+    infoBtn.setAttribute("aria-expanded", "false");
+  }
 }
 
+/* =================== Pista =================== */
 function togglePista(e) {
   if (e) e.stopPropagation();
   const wrap = document.getElementById("pista-wrap");
@@ -198,16 +230,17 @@ function togglePista(e) {
   }
 }
 
-/* ---------- Render por obra ---------- */
+/* =================== Render por obra =================== */
 function mostrar() {
   if (!datos.length) return;
+
   const item = datos[indice];
-  const titulo = document.getElementById("titulo");
+  const titulo   = document.getElementById("titulo");
   const detalles = document.getElementById("detalles");
-  const leyenda = document.getElementById("leyenda");
-  const botones = document.getElementById("botones");
+  const leyenda  = document.getElementById("leyenda");
+  const botones  = document.getElementById("botones");
   const feedback = document.getElementById("feedback");
-  const img = document.getElementById("imagen");
+  const img      = document.getElementById("imagen");
   const textoExtra = document.getElementById("texto-extra");
 
   titulo.textContent = `Obra ${indice + 1}`;
@@ -215,14 +248,18 @@ function mostrar() {
   botones.style.display = "none";
   document.body.style.backgroundColor = "#dcdcdc";
 
+  // Cerrar pista
   const pistaBox = document.getElementById("pistaBox");
   if (pistaBox) { pistaBox.classList.add("hidden"); pistaBox.style.display = "none"; pistaBox.textContent = ""; }
 
-  // Mostrar leyenda; ocultar ficha
+  // Mostrar leyenda / ocultar ficha
   leyenda.style.display = "flex";
   if (modoJuego === "mesa") leyenda.classList.add("modo-mesa"); else leyenda.classList.remove("modo-mesa");
   detalles.style.display = "none";
   detalles.classList.add("invisible");
+
+  // Cerrar todas las infos
+  closeAllInfoPanels();
 
   // Preparar leyenda según modo
   prepararLeyendaParaModo();
@@ -236,7 +273,7 @@ function mostrar() {
   // Audio
   prepararAudio(item.audio);
 
-  // Si ya había solución mostrada (volver atrás)
+  // Si ya estaba la solución (al volver atrás)
   if (solucionMostrada[indice]) {
     rellenarFicha(item);
     if (modoJuego === "solitario") leyenda.style.display = "none";
@@ -247,7 +284,7 @@ function mostrar() {
   }
 }
 
-function mostrarSolucion() { // MESA
+function mostrarSolucion() { // Modo MESA
   if (!datos.length) return;
   const item = datos[indice];
   solucionMostrada[indice] = true;
@@ -286,31 +323,26 @@ function anterior() {
   }
 }
 
-/* ---------- Solitario (respuesta) ---------- */
+/* =================== Solitario (respuesta) =================== */
 function onElegirColorSolitario(e) {
   const btn = e.currentTarget;
   if (btn.disabled) return;
   if (solucionMostrada[indice]) return;
 
-  const elegido = (btn.dataset.hex || "").toLowerCase().trim();
+  const elegido  = (btn.dataset.hex || "").toLowerCase().trim();
   const correcto = (datos[indice].color || "").toLowerCase().trim();
-
   const ok = (elegido === correcto);
 
-  // Puntuación (la pista NO penaliza)
   if (ok) { puntos++; racha++; if (racha > rachaMax) rachaMax = racha; }
   else { racha = 0; }
   pintarMarcadores();
 
-  // Feedback visual
   marcarLeyendaTrasRespuesta(correcto, elegido, ok);
 
-  // Feedback textual
   const fb = document.getElementById("feedback");
   fb.textContent = ok ? "✔ ¡Correcto!" : "✖ Incorrecto";
   fb.style.color = ok ? "#1a7f37" : "#b4232d";
 
-  // Mostrar ficha
   solucionMostrada[indice] = true;
   rellenarFicha(datos[indice]);
   document.getElementById("leyenda").style.display = "none";
@@ -365,11 +397,7 @@ function marcarLeyendaTrasRespuesta(hexCorrecto, hexElegido, acierto) {
   }
 }
 
-function getLeyendaBotones() {
-  return Array.from(document.querySelectorAll("#leyenda .leyenda-item"));
-}
-
-/* ---------- Audio ---------- */
+/* =================== Audio =================== */
 function prepararAudio(url) {
   const contc = document.getElementById("audio-container");
   contc.innerHTML = "";
@@ -402,18 +430,21 @@ function prepararAudio(url) {
   audioGlobal.onplay  = () => { const b = document.getElementById("btnPlayPause"); if (b) { b.innerHTML = '<i data-lucide="pause"></i>'; if (window.lucide) lucide.createIcons(); } };
 }
 
-/* ---------- Ficha ---------- */
+/* =================== Ficha =================== */
 function rellenarFicha(item) {
   document.getElementById("anio").textContent = item.año || "";
   document.getElementById("descripcion").innerHTML = `<strong>${item.autor || ""}</strong><br>${item.obra || ""}`;
+
   const img = document.getElementById("imagen");
   img.classList.add("hidden");
   img.removeAttribute("src"); img.alt = "";
   img.onload = () => img.classList.remove("hidden");
   if (item.imagen && item.imagen.trim() !== "") { img.src = item.imagen; img.alt = item.obra || ""; }
+
   const textoExtra = document.getElementById("texto-extra");
   if (item.texto && item.texto.trim() !== "") { textoExtra.textContent = item.texto; textoExtra.classList.remove("hidden"); }
   else { textoExtra.textContent = ""; textoExtra.classList.add("hidden"); }
+
   document.getElementById("botones").style.display = "flex";
 }
 
