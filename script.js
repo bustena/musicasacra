@@ -268,7 +268,10 @@ function mostrar() {
   const img      = document.getElementById("imagen");
   const textoExtra = document.getElementById("texto-extra");
 
-  titulo.textContent = `Obra ${indice + 1}`;
+  // >>> contador N / TOTAL
+  const total = datos.length;
+  titulo.textContent = `Obra ${indice + 1} / ${total}`;
+
   feedback.textContent = "";
   feedback.style.color = "#000";
   feedback.style.fontWeight = "700";
