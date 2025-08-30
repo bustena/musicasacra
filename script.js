@@ -111,7 +111,7 @@ function onKey(e) {
 }
 
 function abrirReglas() {
-  const URL_REGLAS = "https://view.genially.com/6834d0143c53b6064031a058?idSlide=7099ad60-bc41-4a7a-83be-0fe6381c3869";
+  const URL_REGLAS = "https://bustena.wordpress.com/historia-de-la-musica-apps-para-aprender-jugando/";
   window.open(URL_REGLAS, "_blank");
 }
 
