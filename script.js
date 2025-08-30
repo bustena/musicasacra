@@ -270,7 +270,7 @@ function mostrar() {
 
   // >>> contador N / TOTAL
   const total = datos.length;
-  titulo.textContent = `Obra ${indice + 1} / ${total}`;
+  titulo.textContent = `Audición ${indice + 1} / ${total}`;
 
   feedback.textContent = "";
   feedback.style.color = "#000";
