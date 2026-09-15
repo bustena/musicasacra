@@ -55,6 +55,15 @@ header .header-link{display:inline-flex;align-items:center;gap:.6em;text-decorat
 #detalles{min-height:4em;transition:opacity .3s ease;}
 .invisible{opacity:0;visibility:hidden;}
 
+#detalles {
+  background: rgba(255, 255, 255, 0.78);
+  color: #222;
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  box-sizing: border-box;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.10);
+}
+
 /* ================= BOTONES GENERALES ================= */
 button{
   padding:.8em 1.5em;margin:.5em;font-size:1em;border:none;border-radius:10px;
