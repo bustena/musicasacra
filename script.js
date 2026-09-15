@@ -501,3 +501,43 @@ function pintarMarcadores() {
   document.getElementById("racha").textContent = racha;
   document.getElementById("rachaMax").textContent = rachaMax;
 }
+
+let ultimoAlto = 0;
+
+function enviarAltura() {
+  requestAnimationFrame(() => {
+    const altura = Math.max(
+      document.body.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.scrollHeight,
+      document.documentElement.offsetHeight
+    ) + 20;
+
+    if (altura !== ultimoAlto) {
+      ultimoAlto = altura;
+
+      window.parent.postMessage({
+        type: 'hm-app-height',
+        height: altura
+      }, '*');
+    }
+  });
+}
+
+window.addEventListener('load', () => {
+  window.scrollTo(0, 0);
+  enviarAltura();
+});
+
+window.addEventListener('resize', enviarAltura);
+
+const resizeObserver = new ResizeObserver(enviarAltura);
+resizeObserver.observe(document.body);
+
+const mutationObserver = new MutationObserver(enviarAltura);
+mutationObserver.observe(document.body, {
+  childList: true,
+  subtree: true,
+  attributes: true,
+  characterData: true
+});
