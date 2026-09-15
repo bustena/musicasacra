@@ -503,17 +503,34 @@ function pintarMarcadores() {
 }
 
 let ultimoAlto = 0;
+let envioPendiente = false;
 
 function enviarAltura() {
-  requestAnimationFrame(() => {
-    const altura = Math.max(
-      document.body.scrollHeight,
-      document.body.offsetHeight,
-      document.documentElement.scrollHeight,
-      document.documentElement.offsetHeight
-    ) + 20;
+  if (envioPendiente) return;
+  envioPendiente = true;
 
-    if (altura !== ultimoAlto) {
+  requestAnimationFrame(() => {
+    envioPendiente = false;
+
+    const elementos = Array.from(document.body.children);
+
+    let altura = 0;
+
+    elementos.forEach(el => {
+      if (el.classList.contains('hidden')) return;
+
+      const estilo = getComputedStyle(el);
+
+      // Los elementos fixed no forman parte de la altura del documento.
+      if (estilo.position === 'fixed') return;
+
+      const rect = el.getBoundingClientRect();
+      altura = Math.max(altura, rect.bottom);
+    });
+
+    altura = Math.ceil(altura) + 20;
+
+    if (Math.abs(altura - ultimoAlto) > 1) {
       ultimoAlto = altura;
 
       window.parent.postMessage({
@@ -532,9 +549,13 @@ window.addEventListener('load', () => {
 window.addEventListener('resize', enviarAltura);
 
 const resizeObserver = new ResizeObserver(enviarAltura);
-resizeObserver.observe(document.body);
+
+Array.from(document.body.children).forEach(el => {
+  resizeObserver.observe(el);
+});
 
 const mutationObserver = new MutationObserver(enviarAltura);
+
 mutationObserver.observe(document.body, {
   childList: true,
   subtree: true,
