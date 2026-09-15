@@ -523,7 +523,8 @@ function enviarAltura() {
       altura = Math.max(altura, rect.bottom);
     });
 
-    altura = Math.ceil(altura) + 20;
+    const ALTURA_MINIMA = 700;
+    altura = Math.max(ALTURA_MINIMA, Math.ceil(altura) + 20);
 
     if (Math.abs(altura - ultimoAlto) > 1) {
       ultimoAlto = altura;
