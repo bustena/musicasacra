@@ -4,16 +4,16 @@
 *::before,
 *::after { box-sizing: border-box; }
 
-html, body { overflow-x: hidden; }
-
-body{
-  font-family:'Quicksand',sans-serif;
-  text-align:center;
-  margin:0;
-  background:#dcdcdc;
-  transition:background-color 1s ease;
-  /* espacio para la barra fija inferior */
-  padding-bottom: 84px;
+html,
+body {
+  font-family: 'Quicksand', sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  background: #dcdcdc;
+  transition: background-color 1s ease;
 }
 
 /* ================= CABECERA ================= */
