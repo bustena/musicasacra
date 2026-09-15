@@ -562,3 +562,20 @@ mutationObserver.observe(document.body, {
   attributes: true,
   characterData: true
 });
+
+window.addEventListener('resize', enviarAltura);
+
+const resizeObserver = new ResizeObserver(enviarAltura);
+
+Array.from(document.body.children).forEach(el => {
+  resizeObserver.observe(el);
+});
+
+const mutationObserver = new MutationObserver(enviarAltura);
+
+mutationObserver.observe(document.body, {
+  childList: true,
+  subtree: true,
+  attributes: true,
+  characterData: true
+});
